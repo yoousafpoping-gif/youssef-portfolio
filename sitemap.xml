@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Main Portfolio Page -->
+  <url>
+    <loc>https://yoousafpoping-gif.github.io/youssef-portfolio/</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://yoousafpoping-gif.github.io/youssef-portfolio/Person_wearing_modern_eyeglasses_202606081448%20copy.jpg</image:loc>
+      <image:title>يوسف محمد - مصمم جرافيك وصانع محتوى بالذكاء الاصطناعي</image:title>
+      <image:caption>صورة شخصية ليوسف محمد - Graphic Designer &amp; AI Content Creator</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yoousafpoping-gif.github.io/youssef-portfolio/og-image.jpg</image:loc>
+      <image:title>يوسف محمد | Graphic Designer &amp; AI Content Creator</image:title>
+      <image:caption>أحوّل الأفكار إلى تجارب بصرية لا تُنسى</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Sections as separate entries for better indexing -->
+  <url>
+    <loc>https://yoousafpoping-gif.github.io/youssef-portfolio/#about</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://yoousafpoping-gif.github.io/youssef-portfolio/#works</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://yoousafpoping-gif.github.io/youssef-portfolio/#videos</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://yoousafpoping-gif.github.io/youssef-portfolio/#before-after</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://yoousafpoping-gif.github.io/youssef-portfolio/#testimonials</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://yoousafpoping-gif.github.io/youssef-portfolio/#contact</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
