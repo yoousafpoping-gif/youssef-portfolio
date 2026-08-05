@@ -70,6 +70,27 @@ body { background: var(--bg); color: var(--text); overflow-x: hidden; cursor: no
 @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.98); } }
 @keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes iconGlow { from { filter: drop-shadow(0 0 20px rgba(255,107,53,0.4)); } to { filter: drop-shadow(0 0 40px rgba(255,140,66,0.7)); } }
+
+/* ===== Icon Glow Effect ===== */
+.icon { 
+  display: inline-block; 
+  vertical-align: middle; 
+  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
+  transition: filter 0.3s;
+}
+.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
+  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
+}
+.project-card:hover .project-overlay .icon {
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+}
+.nav-links a:hover .icon, .mobile-nav a:hover .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
+}
+.hero-badge .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
+}
+
 @media (max-width: 768px) {
   .preloader-text { font-size: 2em; }
   .preloader-sub { font-size: 0.8em; }
@@ -106,7 +127,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 20px 4
 nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 [data-theme="light"] nav.scrolled { background: rgba(255,255,255,0.95); }
 .logo { font-size: 1.5em; font-weight: 800; background: linear-gradient(135deg, #ff6b35, #ffb347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.nav-links { display: flex; gap: 35px; list-style: none; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a { font-size: 0.9em; }
 .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95em; transition: color 0.3s; position: relative; }
 .nav-links a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 2px; background: linear-gradient(90deg, #ff6b35, #ffb347); transition: width 0.3s; border-radius: 2px; }
 .nav-links a:hover { color: var(--text); }
@@ -122,7 +144,45 @@ nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 
 .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 40px 60px; position: relative; overflow: hidden; background: radial-gradient(ellipse at center, rgba(255,107,53,0.08) 0%, transparent 60%); }
 .hero-content { position: relative; z-index: 2; max-width: 900px; }
-.hero-avatar { width: clamp(90px, 20vw, 170px); height: clamp(90px, 20vw, 170px); border-radius: 50%; object-fit: cover; border: 4px solid rgba(102,126,234,0.4); margin-bottom: clamp(16px, 3vw, 30px); box-shadow: 0 0 60px rgba(102,126,234,0.3), 0 0 120px rgba(118,75,162,0.15); animation: fadeInUp 1s ease, avatarGlow 3s ease infinite alternate; }
+.hero-avatar { 
+  width: clamp(100px, 22vw, 180px); 
+  height: clamp(100px, 22vw, 180px); 
+  border-radius: 50%; 
+  object-fit: cover; 
+  border: 3px solid rgba(255,107,53,0.5); 
+  margin-bottom: clamp(16px, 3vw, 30px);
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 60px rgba(255,107,53,0.3), 0 0 120px rgba(255,140,66,0.15);
+} box-shadow: 0 0 60px rgba(102,126,234,0.3), 0 0 120px rgba(118,75,162,0.15); animation: fadeInUp 1s ease, avatarGlow 3s ease infinite alternate; }
+
+.hero-avatar-wrap { position: relative; display: inline-block; margin-bottom: clamp(16px, 3vw, 30px); }
+.hero-avatar-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,53,0.6) 0%, rgba(255,140,66,0.3) 40%, transparent 70%);
+  z-index: 1;
+  animation: avatarPulse 3s ease infinite;
+}
+.hero-avatar-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%; height: 90%;
+  border-radius: 50%;
+  background: #ff6b35;
+  z-index: -1;
+}
+@keyframes avatarPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
 @keyframes avatarGlow { from { box-shadow: 0 0 60px rgba(255,107,53,0.3), 0 0 120px rgba(255,140,66,0.15); } to { box-shadow: 0 0 90px rgba(255,107,53,0.5), 0 0 180px rgba(255,179,71,0.25); } }
 .hero-badge { display: inline-block; padding: 8px 24px; border-radius: 50px; background: rgba(255, 107, 53, 0.1); border: 1px solid rgba(255, 107, 53, 0.3); color: #ff6b35; font-size: 0.9em; font-weight: 600; margin-bottom: 25px; animation: fadeInUp 1s ease; }
 .hero h1 { font-size: clamp(1.8em, 5vw, 4em); font-weight: 900; line-height: 1.15; margin-bottom: 20px; animation: fadeInUp 1s ease 0.2s both; }
@@ -131,12 +191,67 @@ nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 .hero-desc { font-size: clamp(0.85em, 2vw, 1.05em); color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; line-height: 1.9; animation: fadeInUp 1s ease 0.6s both; padding: 0 10px; }
 .hero-buttons { display: flex; gap: 20px; justify-content: center; animation: fadeInUp 1s ease 0.8s both; }
 .btn { padding: 15px 35px; border-radius: 50px; font-weight: 700; font-size: 1em; text-decoration: none; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); border: none; cursor: none; display: inline-flex; align-items: center; gap: 10px; position: relative; overflow: hidden; }
-.btn-primary { background: linear-gradient(135deg, #ff6b35, #ff8c42); color: #fff; box-shadow: 0 10px 30px rgba(255,107,53,0.3); }
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(255,107,53,0.4); }
+.btn-primary { 
+  background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(255,140,66,0.9)); 
+  color: #fff; 
+  box-shadow: 0 10px 30px rgba(255,107,53,0.25), inset 0 1px 0 rgba(255,255,255,0.15); 
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.btn-primary:hover { 
+  transform: translateY(-3px); 
+  box-shadow: 0 20px 40px rgba(255,107,53,0.35), inset 0 1px 0 rgba(255,255,255,0.2); 
+  background: linear-gradient(135deg, rgba(255,107,53,1), rgba(255,140,66,1));
+}
 .btn-primary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
 .btn-primary:hover::before { left: 100%; }
-.btn-outline { background: transparent; color: var(--text); border: 2px solid var(--glass-border); }
-.btn-outline:hover { border-color: rgba(255,107,53,0.5); background: rgba(255,107,53,0.05); }
+.btn-outline { 
+  background: rgba(255,255,255,0.03); 
+  color: var(--text); 
+  border: 1px solid rgba(255,255,255,0.1); 
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.btn-outline:hover { 
+  border-color: rgba(255,107,53,0.5); 
+  background: rgba(255,107,53,0.08); 
+  box-shadow: 0 8px 25px rgba(255,107,53,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* ===== Orange Glow Spots ===== */
+.glow-spot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+.glow-spot-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,107,53,0.5) 0%, rgba(255,140,66,0.2) 50%, transparent 70%);
+  top: -10%; right: -10%;
+  animation: glowFloat 10s ease infinite;
+}
+.glow-spot-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,140,66,0.4) 0%, rgba(255,107,53,0.15) 50%, transparent 70%);
+  bottom: 10%; left: -15%;
+  animation: glowFloat 12s ease infinite reverse;
+}
+.glow-spot-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,179,71,0.3) 0%, transparent 60%);
+  top: 40%; left: 30%;
+  animation: glowFloat 15s ease infinite;
+}
+@keyframes glowFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -20px) scale(1.1); }
+  66% { transform: translate(-15px, 15px) scale(0.95); }
+}
+[data-theme="light"] .glow-spot { opacity: 0.25; }
+
 .float-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; }
 .orb-1 { width: 400px; height: 400px; background: #ff6b35; top: 10%; left: -10%; animation: float 8s ease infinite; opacity: 0.2; }
 .orb-2 { width: 300px; height: 300px; background: #ff8c42; bottom: 10%; right: -5%; animation: float 10s ease infinite reverse; opacity: 0.15; }
@@ -207,7 +322,18 @@ nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 .skill-tag:hover::before { left: 100%; }
 
 .filter-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 50px; flex-wrap: wrap; }
-.filter-btn { padding: 12px 24px; border-radius: 50px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); font-weight: 600; cursor: none; transition: all 0.3s; font-size: 0.9em; }
+.filter-btn { 
+  padding: 10px 22px; 
+  border-radius: 50px; 
+  background: rgba(255,255,255,0.03); 
+  border: 1px solid rgba(255,255,255,0.08); 
+  color: var(--text-muted); 
+  font-weight: 600; 
+  cursor: none; 
+  transition: all 0.3s; 
+  font-size: 0.85em; 
+  backdrop-filter: blur(10px);
+}
 .filter-btn:hover, .filter-btn.active { background: linear-gradient(135deg, #ff6b35, #ff8c42); color: #fff; border-color: transparent; box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3); }
 
 /* 3D Tilt Cards */
@@ -471,6 +597,27 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
 @keyframes glitch-anim { 0% { clip: rect(31px,9999px,94px,0); } 20% { clip: rect(78px,9999px,20px,0); } 40% { clip: rect(12px,9999px,6px,0); } 60% { clip: rect(65px,9999px,89px,0); } 80% { clip: rect(23px,9999px,67px,0); } 100% { clip: rect(91px,9999px,34px,0); } }
 @keyframes glitch-anim2 { 0% { clip: rect(65px,9999px,99px,0); } 20% { clip: rect(12px,9999px,56px,0); } 40% { clip: rect(89px,9999px,23px,0); } 60% { clip: rect(34px,9999px,78px,0); } 80% { clip: rect(56px,9999px,12px,0); } 100% { clip: rect(23px,9999px,91px,0); } }
 
+
+/* ===== Icon Glow Effect ===== */
+.icon { 
+  display: inline-block; 
+  vertical-align: middle; 
+  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
+  transition: filter 0.3s;
+}
+.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
+  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
+}
+.project-card:hover .project-overlay .icon {
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+}
+.nav-links a:hover .icon, .mobile-nav a:hover .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
+}
+.hero-badge .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
+}
+
 @media (max-width: 768px) {
   body { cursor: auto; }
   .cursor, .cursor-light { display: none !important; }
@@ -530,7 +677,42 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
   .marquee-container { display: none; }
 
   /* Reduce orbs opacity */
-  .float-orb { opacity: 0.15; }
+  
+/* ===== Orange Glow Spots ===== */
+.glow-spot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+.glow-spot-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,107,53,0.5) 0%, rgba(255,140,66,0.2) 50%, transparent 70%);
+  top: -10%; right: -10%;
+  animation: glowFloat 10s ease infinite;
+}
+.glow-spot-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,140,66,0.4) 0%, rgba(255,107,53,0.15) 50%, transparent 70%);
+  bottom: 10%; left: -15%;
+  animation: glowFloat 12s ease infinite reverse;
+}
+.glow-spot-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,179,71,0.3) 0%, transparent 60%);
+  top: 40%; left: 30%;
+  animation: glowFloat 15s ease infinite;
+}
+@keyframes glowFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -20px) scale(1.1); }
+  66% { transform: translate(-15px, 15px) scale(0.95); }
+}
+[data-theme="light"] .glow-spot { opacity: 0.25; }
+
+.float-orb { opacity: 0.15; }
   .orb-1 { width: 200px; height: 200px; }
   .orb-2 { width: 150px; height: 150px; }
   .orb-3 { width: 100px; height: 100px; }
@@ -838,7 +1020,42 @@ nav.scrolled {
 }
 .focus-toggle:hover { transform: scale(1.1); border-color: var(--primary); }
 .focus-mode .marquee-container,
-.focus-mode .float-orb,
+.focus-mode 
+/* ===== Orange Glow Spots ===== */
+.glow-spot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+.glow-spot-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,107,53,0.5) 0%, rgba(255,140,66,0.2) 50%, transparent 70%);
+  top: -10%; right: -10%;
+  animation: glowFloat 10s ease infinite;
+}
+.glow-spot-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,140,66,0.4) 0%, rgba(255,107,53,0.15) 50%, transparent 70%);
+  bottom: 10%; left: -15%;
+  animation: glowFloat 12s ease infinite reverse;
+}
+.glow-spot-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,179,71,0.3) 0%, transparent 60%);
+  top: 40%; left: 30%;
+  animation: glowFloat 15s ease infinite;
+}
+@keyframes glowFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -20px) scale(1.1); }
+  66% { transform: translate(-15px, 15px) scale(0.95); }
+}
+[data-theme="light"] .glow-spot { opacity: 0.25; }
+
+.float-orb,
 .focus-mode #particleCanvas,
 .focus-mode .space-bg,
 .focus-mode .floating-stars,
@@ -918,6 +1135,27 @@ nav.scrolled {
 @media (max-width: 1100px) {
   .projects-grid.masonry { column-count: 2; }
 }
+
+/* ===== Icon Glow Effect ===== */
+.icon { 
+  display: inline-block; 
+  vertical-align: middle; 
+  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
+  transition: filter 0.3s;
+}
+.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
+  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
+}
+.project-card:hover .project-overlay .icon {
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+}
+.nav-links a:hover .icon, .mobile-nav a:hover .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
+}
+.hero-badge .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
+}
+
 @media (max-width: 768px) {
   .projects-grid.masonry { column-count: 1; }
 }
@@ -951,7 +1189,7 @@ nav.scrolled {
   gap: 10px;
 }
 .img-error::before {
-  content: '🖼️';
+  content: '<svg class="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
   font-size: 2em;
   opacity: 0.5;
 }
@@ -963,6 +1201,27 @@ nav.scrolled {
 }
 
 /* ===== Mobile Responsive Updates ===== */
+
+/* ===== Icon Glow Effect ===== */
+.icon { 
+  display: inline-block; 
+  vertical-align: middle; 
+  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
+  transition: filter 0.3s;
+}
+.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
+  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
+}
+.project-card:hover .project-overlay .icon {
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+}
+.nav-links a:hover .icon, .mobile-nav a:hover .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
+}
+.hero-badge .icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
+}
+
 @media (max-width: 768px) {
   .hamburger { display: flex; }
   .nav-links { display: none; }
@@ -1009,7 +1268,7 @@ nav.scrolled {
 
 <div class="preloader" id="preloader">
   <div class="preloader-icon">
-    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 20px rgba(255,107,53,0.6));">
       <defs>
         <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#ff6b35"/>
@@ -1026,7 +1285,6 @@ nav.scrolled {
       <circle cx="40" cy="20" r="5" fill="url(#logoGrad)" filter="url(#glow)"/>
     </svg>
   </div>
-  <div class="preloader-text">يوسف محمد</div>
   <div class="preloader-sub">Graphic Designer & AI Creator</div>
   <div class="preloader-bar"><div class="preloader-bar-inner"></div></div>
 </div>
@@ -1034,10 +1292,26 @@ nav.scrolled {
 <div class="cursor" id="cursor"></div>
 <div class="cursor-light" id="cursorLight"></div>
 
-<button class="theme-toggle" id="themeToggle" title="تبديل الوضع">🌙</button>
+<button class="theme-toggle" id="themeToggle" title="تبديل الوضع"><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
 
 <nav id="navbar">
-  <div class="logo">يوسف محمد</div>
+  <div class="logo">
+    <svg width="32" height="32" viewBox="0 0 80 80" fill="none" style="filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));">
+      <defs>
+        <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff6b35"/>
+          <stop offset="100%" style="stop-color:#ffb347"/>
+        </linearGradient>
+        <filter id="logoGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <circle cx="40" cy="40" r="36" stroke="url(#navLogoGrad)" stroke-width="4" fill="none" filter="url(#logoGlow)"/>
+      <path d="M25 55 L40 25 L55 55" stroke="url(#navLogoGrad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#logoGlow)"/>
+      <circle cx="40" cy="20" r="6" fill="url(#navLogoGrad)" filter="url(#logoGlow)"/>
+    </svg>
+  </div>
   <ul class="nav-links">
     <li><a href="#about" data-section="about">نبذة عني</a></li>
     <li><a href="#works" data-section="works">أعمالي</a></li>
@@ -1065,12 +1339,18 @@ nav.scrolled {
 
 <section class="hero">
   <canvas id="particleCanvas"></canvas>
+  <div class="glow-spot glow-spot-1"></div>
+  <div class="glow-spot glow-spot-2"></div>
+  <div class="glow-spot glow-spot-3"></div>
   <div class="float-orb orb-1"></div>
   <div class="float-orb orb-2"></div>
   <div class="float-orb orb-3"></div>
   <div class="hero-content">
-    <img src="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" alt="يوسف محمد" class="hero-avatar">
-    <div class="hero-badge">✦ Graphic Designer & AI Content Creator</div>
+    <div class="hero-avatar-wrap">
+      <div class="hero-avatar-glow"></div>
+      <img src="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" alt="يوسف محمد" class="hero-avatar">
+    </div>
+    <div class="hero-badge"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg> Graphic Designer & AI Content Creator</div>
     <h1>أحوّل الأفكار إلى <span class="gradient glitch" data-text="تجارب بصرية">تجارب بصرية</span><br>لا تُنسى</h1>
     <p class="hero-subtitle" id="typingText"></p>
     <p class="hero-desc">
@@ -1078,13 +1358,13 @@ nav.scrolled {
       من هويات الشركات إلى التصاميم الرياضية والإعلانات التجارية والأفلام — كل بكسل له قصة.
     </p>
     <div class="hero-buttons">
-      <a href="#works" class="btn btn-primary magnetic">🎨 استكشف أعمالي</a>
-      <a href="#contact" class="btn btn-outline magnetic">📩 تواصل معي</a>
+      <a href="#works" class="btn btn-primary magnetic"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.01 17.461 2 12 2z"/></svg> استكشف أعمالي</a>
+      <a href="#contact" class="btn btn-outline magnetic"><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> تواصل معي</a>
     </div>
     <div class="marquee-container">
       <div class="marquee-track" id="marqueeTrack">
-        <div class="marquee-text">🎨 تصميم جرافيك احترافي <span>•</span> 🤖 محتوى بالذكاء الاصطناعي <span>•</span> 🎬 مونتاج وفيديو <span>•</span> ⚽ تصاميم رياضية <span>•</span> 📚 أغلفة كتب <span>•</span> 🎭 بوسترات أفلام <span>•</span> 🏷️ هويات بصرية <span>•</span> 📱 سوشيال ميديا <span>•</span></div>
-        <div class="marquee-text">🎨 تصميم جرافيك احترافي <span>•</span> 🤖 محتوى بالذكاء الاصطناعي <span>•</span> 🎬 مونتاج وفيديو <span>•</span> ⚽ تصاميم رياضية <span>•</span> 📚 أغلفة كتب <span>•</span> 🎭 بوسترات أفلام <span>•</span> 🏷️ هويات بصرية <span>•</span> 📱 سوشيال ميديا <span>•</span></div>
+        <div class="marquee-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.01 17.461 2 12 2z"/></svg> تصميم جرافيك احترافي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg> محتوى بالذكاء الاصطناعي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> مونتاج وفيديو <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/><circle cx="12" cy="12" r="4"/></svg> تصاميم رياضية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> أغلفة كتب <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg> بوسترات أفلام <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> هويات بصرية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> سوشيال ميديا <span>•</span></div>
+        <div class="marquee-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.01 17.461 2 12 2z"/></svg> تصميم جرافيك احترافي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg> محتوى بالذكاء الاصطناعي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> مونتاج وفيديو <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/><circle cx="12" cy="12" r="4"/></svg> تصاميم رياضية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> أغلفة كتب <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg> بوسترات أفلام <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> هويات بصرية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> سوشيال ميديا <span>•</span></div>
       </div>
     </div>
   </div>
@@ -1159,495 +1439,495 @@ nav.scrolled {
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'تهنئة عيد الأضحى — MMI')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'تهنئة عيد الأضحى — MMI')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="fber-Eid.png" alt="تهنئة عيد الأضحى — MMI" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">تهنئة عيد الأضحى — MMI</h3>
         <p class="project-desc">تصميم تهنئة عيد الأضحى المبارك لشركة MMI للإنشاءات والتصميم، بأسلوب يجمع بين الأصالة الإسلامية والحداثة البصرية.</p>
-        <div class="view-counter">👁️ 1.2K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'تهنئة العيد — المعادي للمقاولات')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'تهنئة العيد — المعادي للمقاولات')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="المعادي-للمقولات.png" alt="تهنئة العيد — المعادي للمقاولات" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">تهنئة العيد — المعادي للمقاولات</h3>
         <p class="project-desc">تصميم احترافي لتهنئة العيد لشركة المعادي للمقاولات، مستخدماً عناصر بصرية ترمز للوحدة والتجمع الروحاني.</p>
-        <div class="view-counter">👁️ 980</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 980</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'إعلان عيد الأضحى الإبداعي')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'إعلان عيد الأضحى الإبداعي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="عيدد-الاضحي-1.png" alt="إعلان عيد الأضحى الإبداعي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان عيد الأضحى الإبداعي</h3>
         <p class="project-desc">إعلان سينمائي لعيد الأضحى بأسلوب درامي مبتكر، يجسد فكرة الذبيحة بشكل فني جذاب ومؤثر.</p>
-        <div class="view-counter">👁️ 2.5K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'إعلان مكرونة الملكة')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'إعلان مكرونة الملكة')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="الملكة-1.png" alt="إعلان مكرونة الملكة" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان مكرونة الملكة</h3>
         <p class="project-desc">تصميم إعلاني عصري لمكرونة الملكة يركز على جودة المنتج ونقاء المكونات بألوان منعشة وجذابة.</p>
-        <div class="view-counter">👁️ 1.8K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'إعلان كرانشي الحار')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'إعلان كرانشي الحار')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="كرانشي.png" alt="إعلان كرانشي الحار" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان كرانشي الحار</h3>
         <p class="project-desc">تصميم ديناميكي لمنتج كرانشي Flamin Hot يستخدم عناصر النار والحركة لنقل إحساس التشويق والقوة.</p>
-        <div class="view-counter">👁️ 3.1K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'الحكمدار — أحمد مكي')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'الحكمدار — أحمد مكي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="mou.png" alt="الحكمدار — أحمد مكي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">الحكمدار — أحمد مكي</h3>
         <p class="project-desc">تصميم هوية بصرية كاملة لشيف أحمد مكي بما في ذلك الكارت الشخصي والسوشيال ميديا بأسلوب كلاسيكي أنيق.</p>
-        <div class="view-counter">👁️ 850</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 850</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'حملة Big Chips')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'حملة Big Chips')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="BIG-2.png" alt="حملة Big Chips" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">حملة Big Chips</h3>
         <p class="project-desc">حملة إعلانية لمنتج Big Chips بفكرة مبتكرة تجسد وصول المنتج لكل مكان حول العالم بأسلوب مغامر وجريء.</p>
-        <div class="view-counter">👁️ 1.5K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'إعلان Bioderma الطبيعي')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'إعلان Bioderma الطبيعي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="fx.png" alt="إعلان Bioderma الطبيعي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">إعلان Bioderma الطبيعي</h3>
         <p class="project-desc">تصميم إعلاني لمنتج Bioderma بأسلوب طبيعي مذهل يجمع بين الواقعية والخيال البصري في بيئة غابية ساحرة.</p>
-        <div class="view-counter">👁️ 2.2K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'إعلان Kangaroo Bags')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'إعلان Kangaroo Bags')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="xz.png" alt="إعلان Kangaroo Bags" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">إعلان Kangaroo Bags</h3>
         <p class="project-desc">تصميم إعلاني لحقائب Kangaroo Bags يبرز جودة المنتج والفخامة بإضاءة درامية وتفاصيل احترافية.</p>
-        <div class="view-counter">👁️ 1.1K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'حسام حسن — Next Mission')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'حسام حسن — Next Mission')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="hosam-hassan.png" alt="حسام حسن — Next Mission" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">حسام حسن — Next Mission</h3>
         <p class="project-desc">تصميم رياضي لمدرب منتخب مصر حسام حسن بأسلوب درامي يعبر عن التحدي والمهمة القادمة في أمم أفريقيا.</p>
-        <div class="view-counter">👁️ 4.3K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 4.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'ليفربول vs ريال مدريد')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'ليفربول vs ريال مدريد')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="liverpool-x-madrid.png" alt="ليفربول vs ريال مدريد" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">ليفربول vs ريال مدريد</h3>
         <p class="project-desc">تصميم مباراة ليفربول وريال مدريد بدوري أبطال أوروبا بأسلوب سينمائي يعكس حماس المواجهة الكبرى.</p>
-        <div class="view-counter">👁️ 1.9K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.9K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'المغرب vs زامبيا')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'المغرب vs زامبيا')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="morocco-X-zambia.png" alt="المغرب vs زامبيا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">المغرب vs زامبيا</h3>
         <p class="project-desc">تصميم Match Day لمنتخب المغرب ضد زامبيا بكأس أمم أفريقيا بأسلوب بطولي يبرز نجوم الفريق.</p>
-        <div class="view-counter">👁️ 2.7K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.7K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs الزمالك — السوبر')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs الزمالك — السوبر')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="nbe-alahly-X-alzmalek.png" alt="الأهلي vs الزمالك — السوبر" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">الأهلي vs الزمالك — السوبر</h3>
         <p class="project-desc">تصميم كلاسيكو الكرة المصرية بين الأهلي والزمالك على كأس السوبر بتفاصيل درامية وألوان نارية.</p>
-        <div class="view-counter">👁️ 3.5K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs سيراميكا كليوباترا')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs سيراميكا كليوباترا')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="الأهلي-x-سيراميكا.png" alt="الأهلي vs سيراميكا كليوباترا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">الأهلي vs سيراميكا كليوباترا</h3>
         <p class="project-desc">تصميم مباراة الأهلي وسيراميكا كليوباترا بأسلوب ديناميكي يبرز حماس المنافسة والروح الرياضية.</p>
-        <div class="view-counter">👁️ 1.4K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.4K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'ساديو ماني — نهائي الأمم')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'ساديو ماني — نهائي الأمم')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="ساديو-ماني-نهائي-الامم.png" alt="ساديو ماني — نهائي الأمم" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">ساديو ماني — نهائي الأمم</h3>
         <p class="project-desc">تصميم احتفالي لساديو ماني في نهائي أمم أفريقيا بأسلوب مسرحي يعكس الفخر والإنجاز البطولي.</p>
-        <div class="view-counter">👁️ 2.1K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'مصر vs زيمبابوي')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'مصر vs زيمبابوي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="مصر-X-زيمبابوي.png" alt="مصر vs زيمبابوي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">مصر vs زيمبابوي</h3>
         <p class="project-desc">تصميم Match Day لمنتخب مصر ضد زيمبابوي بألوان وطنية وروح بطولية تعكس عظمة الكرة المصرية.</p>
-        <div class="view-counter">👁️ 1.6K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.6K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'يوم المباراة — مصر vs إيران')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'يوم المباراة — مصر vs إيران')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="منتخب-مصر.png" alt="يوم المباراة — مصر vs إيران" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">يوم المباراة — مصر vs إيران</h3>
         <p class="project-desc">تصميم يوم المباراة لمنتخب مصر ضد إيران بأسلوب يجمع بين الهوية المصرية والحماس الرياضي العارم.</p>
-        <div class="view-counter">👁️ 2.9K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.9K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'منتخب مصر في أمم أفريقيا')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'منتخب مصر في أمم أفريقيا')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="منتخب-مصر-امم-افريقي.png" alt="منتخب مصر في أمم أفريقيا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">منتخب مصر في أمم أفريقيا</h3>
         <p class="project-desc">تصميم بطولي لمنتخب مصر في أمم أفريقيا يجسد روح الفريق الواحد والطموح في التتويج باللقب القاري.</p>
-        <div class="view-counter">👁️ 3.8K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'Megrosty Smile')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'Megrosty Smile')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="448468812_122152679426141956_2341648530807116964_n.jpg" alt="Megrosty Smile" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Megrosty Smile</h3>
         <p class="project-desc">هوية بصرية لمطعم Megrosty Smile بتصميم عصري يجمع بين الطابع الغذائي والشعار المميز بألوان حيوية.</p>
-        <div class="view-counter">👁️ 1.3K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'Emasson Clothing')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'Emasson Clothing')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="448507052_122152679666141956_959435827464419903_n.jpg" alt="Emasson Clothing" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Emasson Clothing</h3>
         <p class="project-desc">شعار minimal أنيق لعلامة تجارية ملابس يعكس الأناقة والبساطة في آن واحد بأسلوب تيبوجرافي متقن.</p>
-        <div class="view-counter">👁️ 2.4K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.4K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'Ezoc Logistic')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'Ezoc Logistic')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="448524183_122152555394141956_9212771902099932621_n.jpg" alt="Ezoc Logistic" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Ezoc Logistic</h3>
         <p class="project-desc">هوية بصرية لشركة لوجستيات تجسد السرعة والكفاءة بأيقونة شاحنة ديناميكية وألوان حيوية.</p>
-        <div class="view-counter">👁️ 1.7K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.7K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'Mekawy Trade')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'Mekawy Trade')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="fd.png" alt="Mekawy Trade" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Mekawy Trade</h3>
         <p class="project-desc">شعار تجاري لشركة Mekawy Trade يجمع بين العناصر المالية والتجارية بتصميم عصري ومتوازن.</p>
-        <div class="view-counter">👁️ 2.0K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — 3D')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — 3D')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="Leonardo_Phoenix_A_luxurious_highend_logo_design_for_M_A_C_COS_3.jpg" alt="M.A.C Cosmetics — 3D" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — 3D</h3>
         <p class="project-desc">تصميم لوجو ثلاثي الأبعاد فاخر لعلامة مستحضرات تجميل بأسلوب احترافي وعصري يعكس الفخامة.</p>
-        <div class="view-counter">👁️ 1.0K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Elegant')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Elegant')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_0.jpg" alt="M.A.C Cosmetics — Elegant" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — Elegant</h3>
         <p class="project-desc">تصميم لوجو أنيق وناعم لعلامة تجميل بأسلوب يعكس الفخامة والرقي بخطوط رشيقة وذهبي وردي.</p>
-        <div class="view-counter">👁️ 2.8K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Woman')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Woman')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_3.jpg" alt="M.A.C Cosmetics — Woman" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — Woman</h3>
         <p class="project-desc">تصميم لوجو يجسد جمال المرأة بأسلوب فني مبتكر لعلامة مستحضرات تجميل بظلال وردية ناعمة.</p>
-        <div class="view-counter">👁️ 3.2K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'حياة حافظ إبراهيم')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'حياة حافظ إبراهيم')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="ORJA091.png" alt="حياة حافظ إبراهيم" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">حياة حافظ إبراهيم</h3>
         <p class="project-desc">تصميم غلاف كتاب أدبي بأسلوب كلاسيكي يجمع بين التراث والحداثة مع عناصر بصرية ترمز للشعر والأدب المصري.</p>
-        <div class="view-counter">👁️ 1.5K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="Untitled-1.png" alt="رفقاء الليل" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">رفقاء الليل</h3>
         <p class="project-desc">غلاف رواية رعب وغموض بأسلوب سينمائي مظلم يبني توتراً بصرياً يجذب القارئ من أول نظرة.</p>
-        <div class="view-counter">👁️ 2.3K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل — تصميم داخلي')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل — تصميم داخلي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="Untitled-11.png" alt="رفقاء الليل — تصميم داخلي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">رفقاء الليل — تصميم داخلي</h3>
         <p class="project-desc">تصميم صفحات داخلية للرواية بأسلوب متناسق يحافظ على هوية العمل ويوفر تجربة قراءة مريحة وجذابة.</p>
-        <div class="view-counter">👁️ 3.0K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, 'الشموع السوداء')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'الشموع السوداء')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="غلاف الشموع السوداء.jpg" alt="الشموع السوداء" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">الشموع السوداء</h3>
         <p class="project-desc">غلاف رواية رعب نفسي بأسلوب درامي مظلم يجسد الصراع بين الحياة والموت في إطار تشويقي مثير.</p>
-        <div class="view-counter">👁️ 1.8K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         
-        <button class="share-btn" onclick="shareProject(event, '6 أيام')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, '6 أيام')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="بوستر-6-أيام.jpg" alt="6 أيام" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">6 أيام</h3>
         <p class="project-desc">بوستر فيلم درامي رومانسي بأسلوب سينمائي يجمع بين العواطف والتشويق بإضاءة درامية مذهلة.</p>
-        <div class="view-counter">👁️ 2.6K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.6K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         <div class="new-badge">جديد</div>
-        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الرئيسي')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الرئيسي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="بوستر-سفاح-التجمع.png" alt="سفاح التجمع — البوستر الرئيسي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البوستر الرئيسي</h3>
         <p class="project-desc">بوستر فيلم سفاح التجمع بأسلوب جريء يعكس طابع الإثارة والغموض مع تأثيرات زجاج مكسور دموية.</p>
-        <div class="view-counter">👁️ 1.2K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         <div class="new-badge">جديد</div>
-        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الثاني')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الثاني')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="بوستر-سفاح-التجمع-2.png-2000-2500.png" alt="سفاح التجمع — البوستر الثاني" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البوستر الثاني</h3>
         <p class="project-desc">بوستر بديل لفيلم سفاح التجمع يركز على الجانب النفسي للشخصية بإضاءة حمراء درامية وتأثيرات مرآة.</p>
-        <div class="view-counter">👁️ 980</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 980</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
         <div class="skeleton-overlay skeleton"></div>
         <div class="new-badge">جديد</div>
-        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البانر العريض')" title="مشاركة">🔗</button>
+        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البانر العريض')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         <img class="project-img" src="سفاح-التجمع.png" alt="سفاح التجمع — البانر العريض" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
+        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البانر العريض</h3>
         <p class="project-desc">تصميم بانر عريض للفيلم يجمع بين كل الشخصيات الرئيسية في إطار واحد مثير بتأثيرات زجاج مكسور.</p>
-        <div class="view-counter">👁️ 2.5K</div>
+        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.5K</div>
       </div>
     </div>
   </div>
@@ -1657,7 +1937,7 @@ nav.scrolled {
 <!-- Videos Section -->
 <section class="section" id="videos" style="max-width: 1400px;">
   <div class="section-header reveal">
-    <div class="section-label">🎬 فيديوهات</div>
+    <div class="section-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> فيديوهات</div>
     <h2 class="section-title">أعمال الفيديو والمونتاج</h2>
     <p class="section-desc">مجموعة من أعمال المونتاج والموشن جرافيك والفيديوهات الإعلانية بتنفيذ AI</p>
   </div>
@@ -1665,7 +1945,7 @@ nav.scrolled {
     <div class="video-card">
       <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1f0Q6j9CXS0jLLNC9oVekSegR8I3489Bv/preview">
         <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon">▶</div>
+          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
           <p>اضغط للتشغيل</p>
         </div>
       </div>
@@ -1677,7 +1957,7 @@ nav.scrolled {
     <div class="video-card">
       <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/10oT1N-vnLDQ8q8Fm6gU1FLkEBdhZoczh/preview">
         <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon">▶</div>
+          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
           <p>اضغط للتشغيل</p>
         </div>
       </div>
@@ -1689,7 +1969,7 @@ nav.scrolled {
     <div class="video-card">
       <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1JLT3xWDRemP0APCoonZzGIOELrkTrv03/preview">
         <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon">▶</div>
+          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
           <p>اضغط للتشغيل</p>
         </div>
       </div>
@@ -1701,7 +1981,7 @@ nav.scrolled {
     <div class="video-card">
       <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1Za3NnQ8zdg97p6S-URs8gHJFxAHxTC8A/preview">
         <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon">▶</div>
+          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
           <p>اضغط للتشغيل</p>
         </div>
       </div>
@@ -1717,7 +1997,7 @@ nav.scrolled {
 <!-- Before/After Section -->
 <section class="section" id="before-after">
   <div class="section-header reveal">
-    <div class="section-label">⚡ قبل & بعد</div>
+    <div class="section-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> قبل & بعد</div>
     <h2 class="section-title">تحولات التصميم بالذكاء الاصطناعي</h2>
     <p class="section-desc">اسحب الشريط لمشاهدة التحول من الصورة الأصلية للتصميم النهائي بتقنيات AI</p>
   </div>
@@ -1727,13 +2007,13 @@ nav.scrolled {
         <img class="before-img" src="فيجيوال2.png" alt="الصورة الأصلية — قبل">
         <img class="after-img" src="فيجيوال.png" alt="التصميم النهائي — بعد" id="afterImg">
         <div class="slider-handle" id="sliderHandle"></div>
-        <div class="slider-button" id="sliderButton">⇄</div>
-        <div class="before-label">☀️ قبل — النهار</div>
-        <div class="after-label">🌙 بعد — الليل</div>
+        <div class="slider-button" id="sliderButton"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/><polyline points="12 19 5 12 12 5" transform="rotate(180 12 12)"/></svg></div>
+        <div class="before-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> قبل — النهار</div>
+        <div class="after-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> بعد — الليل</div>
       </div>
     </div>
     <p style="text-align: center; color: var(--text-muted); margin-top: 20px; font-size: 0.95em;">
-      🖱️ اسحب الزر الأوسط يميناً ويساراً لمشاهدة التحول من النهار لليل
+      <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="6"/><line x1="12" y1="7" x2="12" y2="11"/></svg> اسحب الزر الأوسط يميناً ويساراً لمشاهدة التحول من النهار لليل
     </p>
   </div>
 </section>
@@ -1741,13 +2021,13 @@ nav.scrolled {
 <!-- Testimonials Section -->
 <section class="section" id="testimonials" style="max-width: 1400px;">
   <div class="section-header reveal">
-    <div class="section-label">💬 آراء العملاء</div>
+    <div class="section-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> آراء العملاء</div>
     <h2 class="section-title">ماذا يقول عملائي</h2>
     <p class="section-desc">بعض التقييمات من عملائي الذين وثقوا بي في مشاريعهم</p>
   </div>
   <div class="testimonials-grid reveal" id="testimonialsGrid">
     <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <p class="testimonial-text">"يوسف مصمم مبدع بشكل لا يُصدق. حوّل فكرتي البسيطة إلى هوية بصرية كاملة تفوق كل توقعاتي. التزامه بالمواعيد واهتمامه بالتفاصيل الصغيرة يجعله الأفضل في مجاله."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">أ</div>
@@ -1758,7 +2038,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <p class="testimonial-text">"التصاميم الرياضية اللي عملها يوسف لصفحتنا غيّرت شكل المحتوى بالكامل. التفاعل زاد 300% والجمهور بقى يستنى البوسترات بفارغ الصبر. شغل عالمي بمعنى الكلمة."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">م</div>
@@ -1769,7 +2049,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <p class="testimonial-text">"بوستر فيلم "سفاح التجمع" كان تحفة فنية. يوسف فهم الروح الدرامية للعمل من أول جلسة وقدم تصميم يخطف الأنفاس. كل المنتجين سألوني عن المصمم بعد العرض."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">س</div>
@@ -1780,7 +2060,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <p class="testimonial-text">"غلاف رواية 'رفقاء الليل' كان نقلة نوعية في مبيعات الكتاب. التصميم المظلم والسينمائي جذب جمهور جديد تماماً. يوسف مش بس مصمم، ده فنان بجد."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">ع</div>
@@ -1791,7 +2071,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <p class="testimonial-text">"حملة الإعلانات اللي عملها يوسف لشركتنا رفعت المبيعات 40% في أول شهر. الفيديوهات والتصاميم كلها كانت احترافية ومؤثرة. أنصح أي حد يشتغل معاه."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">ل</div>
@@ -1802,7 +2082,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <p class="testimonial-text">"اللوجو اللي صممه يوسف لعلامة الملابس بتاعتنا بقى هوية فعلية للبراند. البساطة والأناقة في التصميم خلّت الناس تفتكرنا من أول نظرة. شغل نظيف جداً."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">ك</div>
@@ -1816,7 +2096,7 @@ nav.scrolled {
 
   <!-- Comment Form -->
   <div class="comment-form-container reveal" id="commentFormContainer">
-    <h3>📝 أضف تقييمك</h3>
+    <h3><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> أضف تقييمك</h3>
     <form id="commentForm">
       <div class="form-group">
         <label>الاسم</label>
@@ -1829,11 +2109,11 @@ nav.scrolled {
       <div class="form-group">
         <label>التقييم</label>
         <div class="rating-stars-input" id="ratingStars">
-          <span data-value="1">★</span>
-          <span data-value="2">★</span>
-          <span data-value="3">★</span>
-          <span data-value="4">★</span>
-          <span data-value="5">★</span>
+          <span data-value="1"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span data-value="2"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span data-value="3"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span data-value="4"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span data-value="5"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
         </div>
         <input type="hidden" id="commentRating" value="5">
       </div>
@@ -1841,7 +2121,7 @@ nav.scrolled {
         <label>التعليق</label>
         <textarea id="commentText" placeholder="اكتب رأيك في التعامل معي..." required></textarea>
       </div>
-      <button type="submit" class="submit-btn">إرسال التقييم ⭐</button>
+      <button type="submit" class="submit-btn">إرسال التقييم <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
     </form>
   </div>
 
@@ -1859,12 +2139,12 @@ nav.scrolled {
 
   <div class="qr-section reveal">
     <div class="qr-card">
-      <h4>📱 واتساب</h4>
+      <h4><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> واتساب</h4>
       <div class="qr-wrap" id="qrWhatsapp"></div>
       <p>امسح الكود للتواصل مباشرة على واتساب</p>
     </div>
     <div class="qr-card">
-      <h4>📷 إنستجرام</h4>
+      <h4><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> إنستجرام</h4>
       <div class="qr-wrap" id="qrInstagram"></div>
       <p>امسح الكود لمتابعة أحدث أعمالي</p>
     </div>
@@ -1872,17 +2152,17 @@ nav.scrolled {
 
   <div class="contact-grid reveal">
     <a href="tel:+201119248965" class="contact-card">
-      <div class="contact-icon">📱</div>
+      <div class="contact-icon"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
       <h4>اتصل بي</h4>
       <p>+20 111 924 8965</p>
     </a>
     <a href="https://wa.me/201119248965" class="contact-card" target="_blank">
-      <div class="contact-icon">💬</div>
+      <div class="contact-icon"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
       <h4>واتساب</h4>
       <p>+20 111 924 8965</p>
     </a>
     <a href="mailto:yoousafpoping@gmail.com" class="contact-card">
-      <div class="contact-icon">📧</div>
+      <div class="contact-icon"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
       <h4>البريد الإلكتروني</h4>
       <p>yoousafpoping@gmail.com</p>
     </a>
@@ -1901,22 +2181,34 @@ nav.scrolled {
 </section>
 
 <footer>
-  <div class="footer-logo">يوسف محمد</div>
+  <div class="footer-logo">
+    <svg width="40" height="40" viewBox="0 0 80 80" fill="none" style="filter: drop-shadow(0 0 10px rgba(255,107,53,0.5));">
+      <defs>
+        <linearGradient id="footLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff6b35"/>
+          <stop offset="100%" style="stop-color:#ffb347"/>
+        </linearGradient>
+      </defs>
+      <circle cx="40" cy="40" r="36" stroke="url(#footLogoGrad)" stroke-width="3" fill="none"/>
+      <path d="M25 55 L40 25 L55 55" stroke="url(#footLogoGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="40" cy="20" r="5" fill="url(#footLogoGrad)"/>
+    </svg>
+  </div>
   <p>© 2026 جميع الحقوق محفوظة | تصميم وتطوير يوسف محمد</p>
   <p style="margin-top: 10px; font-size: 0.85em;">
-    <a href="https://www.instagram.com/yousefiprahimm?igsh=MXFnNWhzOTJleHptMw%3D%3D&utm_source=qr" target="_blank" style="color: #ff6b35; text-decoration: none;">📷 تابعني على إنستجرام</a>
+    <a href="https://www.instagram.com/yousefiprahimm?igsh=MXFnNWhzOTJleHptMw%3D%3D&utm_source=qr" target="_blank" style="color: #ff6b35; text-decoration: none;"><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> تابعني على إنستجرام</a>
   </p>
 </footer>
 
 <!-- Lightbox -->
 
-<button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="العودة للأعلى">↑</button>
-<button class="focus-toggle" id="focusToggle" onclick="toggleFocusMode()" title="وضع التركيز">🎯</button>
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="العودة للأعلى"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
+<button class="focus-toggle" id="focusToggle" onclick="toggleFocusMode()" title="وضع التركيز"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></button>
 <div class="toast" id="toast"></div>
 <canvas id="particleBurst"></canvas>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <div class="lightbox-close" onclick="closeLightboxBtn(event)">✕</div>
+  <div class="lightbox-close" onclick="closeLightboxBtn(event)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
   <img class="lightbox-img" id="lightboxImg" src="" alt="">
   <div class="magnifier-glass" id="magnifierGlass"></div>
   <div class="lightbox-caption" id="lightboxCaption"></div>
@@ -2025,13 +2317,13 @@ const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 let currentTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', currentTheme);
-themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+themeToggle.textContent = currentTheme === 'dark' ? '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' : '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
 
 themeToggle.addEventListener('click', () => {
   currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', currentTheme);
   localStorage.setItem('theme', currentTheme);
-  themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  themeToggle.textContent = currentTheme === 'dark' ? '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' : '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
 });
 
 // Scroll Progress
@@ -2454,7 +2746,7 @@ function loadComments() {
   userCommentsContainer.innerHTML = '';
   if (comments.length > 0) {
     const title = document.createElement('h3');
-    title.textContent = '💬 تعليقات الزوار';
+    title.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> تعليقات الزوار';
     title.style.textAlign = 'center';
     title.style.marginBottom = '20px';
     title.style.fontSize = '1.3em';
@@ -2465,7 +2757,7 @@ function loadComments() {
     div.className = 'user-comment';
     div.innerHTML = `
       <div class="user-comment-header">
-        <span class="user-comment-name">${escapeHtml(comment.name)} ${'★'.repeat(comment.rating)}</span>
+        <span class="user-comment-name">${escapeHtml(comment.name)} ${'<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'.repeat(comment.rating)}</span>
         <span class="user-comment-date">${comment.date}</span>
       </div>
       <p class="user-comment-text">${escapeHtml(comment.text)}</p>
@@ -2509,7 +2801,7 @@ commentForm.addEventListener('submit', (e) => {
   // Show success animation
   const btn = commentForm.querySelector('.submit-btn');
   const originalText = btn.textContent;
-  btn.textContent = '✅ تم الإرسال!';
+  btn.textContent = '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> تم الإرسال!';
   btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
   setTimeout(() => {
     btn.textContent = originalText;
@@ -2633,7 +2925,7 @@ const videoObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.video-lazy').forEach(v => videoObserver.observe(v));
 
 // ===== Copy to Clipboard =====
-function showToast(message, icon = '✅') {
+function showToast(message, icon = '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') {
   const toast = document.getElementById('toast');
   toast.innerHTML = `${icon} ${message}`;
   toast.classList.add('show');
@@ -2770,8 +3062,8 @@ statItems.forEach(item => {
 function toggleFocusMode() {
   document.body.classList.toggle('focus-mode');
   const isFocus = document.body.classList.contains('focus-mode');
-  document.getElementById('focusToggle').textContent = isFocus ? '🔕' : '🎯';
-  showToast(isFocus ? 'وضع التركيز مفعل' : 'وضع التركيز معطل', isFocus ? '🧘' : '✨');
+  document.getElementById('focusToggle').textContent = isFocus ? '<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' : '<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
+  showToast(isFocus ? 'وضع التركيز مفعل' : 'وضع التركيز معطل', isFocus ? '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' : '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>');
 }
 
 // ===== Share Project =====
