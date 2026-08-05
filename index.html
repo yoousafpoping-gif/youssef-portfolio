@@ -276,7 +276,376 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
   .magnifier-glass { display: none !important; }
   .before-after-container { border-radius: 16px; }
 }
+
+/* ===== Back to Top ===== */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3em;
+  cursor: none;
+  z-index: 9997;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 5px 20px rgba(102,126,234,0.3);
+  pointer-events: none;
+}
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+.back-to-top:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 10px 30px rgba(102,126,234,0.5);
+}
+
+/* ===== Mobile Menu ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: none;
+  z-index: 1001;
+  padding: 5px;
+}
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 2px;
+  background: var(--text);
+  transition: all 0.3s;
+  border-radius: 2px;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 350px;
+  height: 100vh;
+  background: var(--surface);
+  backdrop-filter: blur(40px);
+  z-index: 999;
+  padding: 100px 30px 30px;
+  transition: right 0.5s cubic-bezier(0.4,0,0.2,1);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mobile-nav.active { right: 0; }
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+  padding: 15px;
+  border-radius: 14px;
+  transition: all 0.3s;
+  position: relative;
+}
+.mobile-nav a:hover, .mobile-nav a.active {
+  background: rgba(102,126,234,0.1);
+  color: var(--primary);
+}
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s;
+}
+.mobile-overlay.active { opacity: 1; visibility: visible; }
+
+/* ===== Active Nav Link ===== */
+.nav-links a.active { color: var(--primary); }
+.nav-links a.active::after { width: 100%; }
+
+/* ===== Skeleton Loading ===== */
+.skeleton {
+  background: linear-gradient(90deg, var(--border) 25%, var(--surface) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.project-img-wrap .skeleton-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transition: opacity 0.5s;
+}
+.project-img-wrap.loaded .skeleton-overlay { opacity: 0; pointer-events: none; }
+
+/* ===== Enhanced Nav Glassmorphism ===== */
+nav {
+  background: rgba(10,10,10,0.6);
+  backdrop-filter: blur(40px) saturate(1.2);
+  -webkit-backdrop-filter: blur(40px) saturate(1.2);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+[data-theme="light"] nav {
+  background: rgba(255,255,255,0.75);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+nav.scrolled {
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(50px) saturate(1.3);
+}
+[data-theme="light"] nav.scrolled {
+  background: rgba(255,255,255,0.92);
+}
+
+/* ===== Gradient Border Cards ===== */
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 25px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+  background-size: 300% 300%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s;
+  animation: gradientMove 3s ease infinite;
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.project-card:hover::before { opacity: 1; }
+
+/* ===== Toast Notification ===== */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--primary);
+  color: var(--text);
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  z-index: 10010;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 10px 30px rgba(102,126,234,0.2);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== Focus Mode ===== */
+.focus-toggle {
+  position: fixed;
+  top: 150px;
+  left: 20px;
+  z-index: 10003;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  font-size: 1.3em;
+  transition: all 0.3s;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+.focus-toggle:hover { transform: scale(1.1); border-color: var(--primary); }
+.focus-mode .marquee-container,
+.focus-mode .float-orb,
+.focus-mode #particleCanvas,
+.focus-mode .space-bg,
+.focus-mode .floating-stars,
+.focus-mode .cursor-light {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+.focus-mode .hero { background: none; }
+
+/* ===== New Badge ===== */
+.new-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #ff4757, #ff6b81);
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 0.75em;
+  font-weight: 700;
+  z-index: 5;
+  box-shadow: 0 4px 15px rgba(255,71,87,0.4);
+  animation: pulseBadge 2s ease infinite;
+}
+@keyframes pulseBadge {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ===== Share Button ===== */
+.share-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  z-index: 5;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s;
+  font-size: 0.9em;
+}
+.project-card:hover .share-btn { opacity: 1; transform: scale(1); }
+.share-btn:hover { background: var(--primary); }
+
+/* ===== View Counter ===== */
+.view-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-muted);
+  font-size: 0.8em;
+  margin-top: 8px;
+}
+
+/* ===== Masonry Layout ===== */
+.projects-grid.masonry {
+  display: block;
+  column-count: 3;
+  column-gap: 30px;
+}
+.projects-grid.masonry .project-card {
+  break-inside: avoid;
+  margin-bottom: 30px;
+  display: inline-block;
+  width: 100%;
+}
+@media (max-width: 1100px) {
+  .projects-grid.masonry { column-count: 2; }
+}
+@media (max-width: 768px) {
+  .projects-grid.masonry { column-count: 1; }
+}
+
+/* ===== Parallax Image ===== */
+.about-image-frame { overflow: hidden; }
+.about-image-frame img.parallax {
+  will-change: transform;
+}
+
+/* ===== Particle Burst Canvas ===== */
+#particleBurst {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+/* ===== Image Error Placeholder ===== */
+.img-error {
+  background: linear-gradient(135deg, var(--surface), var(--darker));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.9em;
+  gap: 10px;
+}
+.img-error::before {
+  content: '🖼️';
+  font-size: 2em;
+  opacity: 0.5;
+}
+
+/* ===== Enhanced Cursor ===== */
+.cursor {
+  will-change: transform;
+  transition: width 0.2s, height 0.2s, background 0.2s;
+}
+
+/* ===== Mobile Responsive Updates ===== */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .nav-links { display: none; }
+  .back-to-top { width: 45px; height: 45px; font-size: 1.1em; bottom: 20px; left: 20px; }
+  .focus-toggle { display: none; }
+  .projects-grid.masonry { column-count: 1; }
+  .share-btn { display: none; }
+}
+@media (min-width: 769px) {
+  .mobile-nav, .mobile-overlay { display: none !important; }
+}
+
 </style>
+
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" as="style">
+<link rel="preload" href="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" as="image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "يوسف محمد",
+  "jobTitle": "Graphic Designer & AI Content Creator",
+  "description": "مصمم جرافيك وصانع محتوى بالذكاء الاصطناعي - بخبرة 4 سنوات في التصميم الجرافيكي وصناعة المحتوى الرقمي",
+  "url": "https://www.instagram.com/yousefiprahimm/",
+  "image": "Person_wearing_modern_eyeglasses_202606081448 copy.jpg",
+  "sameAs": [
+    "https://www.instagram.com/yousefiprahimm/"
+  ],
+  "knowsAbout": ["Graphic Design", "AI Content Creation", "Video Editing", "Brand Identity", "Social Media Design"],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Freelance"
+  }
+}
+</script>
+
+<base target="_blank">
 </head>
 <body>
 
@@ -297,14 +666,29 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
 <nav id="navbar">
   <div class="logo">يوسف محمد</div>
   <ul class="nav-links">
-    <li><a href="#about">نبذة عني</a></li>
-    <li><a href="#works">أعمالي</a></li>
-    <li><a href="#videos">فيديوهات</a></li>
-    <li><a href="#before-after">قبل & بعد</a></li>
-    <li><a href="#testimonials">آراء العملاء</a></li>
-    <li><a href="#contact">تواصل</a></li>
+    <li><a href="#about" data-section="about">نبذة عني</a></li>
+    <li><a href="#works" data-section="works">أعمالي</a></li>
+    <li><a href="#videos" data-section="videos">فيديوهات</a></li>
+    <li><a href="#before-after" data-section="before-after">قبل & بعد</a></li>
+    <li><a href="#testimonials" data-section="testimonials">آراء العملاء</a></li>
+    <li><a href="#contact" data-section="contact">تواصل</a></li>
   </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 </nav>
+
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+<div class="mobile-nav" id="mobileNav">
+  <a href="#about" onclick="toggleMobileMenu()">نبذة عني</a>
+  <a href="#works" onclick="toggleMobileMenu()">أعمالي</a>
+  <a href="#videos" onclick="toggleMobileMenu()">فيديوهات</a>
+  <a href="#before-after" onclick="toggleMobileMenu()">قبل & بعد</a>
+  <a href="#testimonials" onclick="toggleMobileMenu()">آراء العملاء</a>
+  <a href="#contact" onclick="toggleMobileMenu()">تواصل</a>
+</div>
 
 <section class="hero">
   <canvas id="particleCanvas"></canvas>
@@ -343,7 +727,7 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
   <div class="about-grid">
     <div class="about-image reveal">
       <div class="about-image-frame">
-        <img src="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" alt="يوسف محمد">
+        <img src="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" alt="يوسف محمد" class="parallax" id="aboutParallaxImg">
       </div>
     </div>
     <div class="about-text reveal">
@@ -396,369 +780,501 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
     <button class="filter-btn" onclick="filterProjects('movie', this)">بوسترات أفلام</button>
   </div>
 
-  <div class="projects-grid" id="projectsGrid">
+  <div class="projects-grid masonry" id="projectsGrid">
 
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="fber-Eid.png" alt="تهنئة عيد الأضحى — MMI" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'تهنئة عيد الأضحى — MMI')" title="مشاركة">🔗</button>
+        <img class="project-img" src="fber-Eid.png" alt="تهنئة عيد الأضحى — MMI" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">تهنئة عيد الأضحى — MMI</h3>
         <p class="project-desc">تصميم تهنئة عيد الأضحى المبارك لشركة MMI للإنشاءات والتصميم، بأسلوب يجمع بين الأصالة الإسلامية والحداثة البصرية.</p>
+        <div class="view-counter">👁️ 1.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="المعادي-للمقولات.png" alt="تهنئة العيد — المعادي للمقاولات" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'تهنئة العيد — المعادي للمقاولات')" title="مشاركة">🔗</button>
+        <img class="project-img" src="المعادي-للمقولات.png" alt="تهنئة العيد — المعادي للمقاولات" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">تهنئة العيد — المعادي للمقاولات</h3>
         <p class="project-desc">تصميم احترافي لتهنئة العيد لشركة المعادي للمقاولات، مستخدماً عناصر بصرية ترمز للوحدة والتجمع الروحاني.</p>
+        <div class="view-counter">👁️ 980</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="عيدد-الاضحي-1.png" alt="إعلان عيد الأضحى الإبداعي" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'إعلان عيد الأضحى الإبداعي')" title="مشاركة">🔗</button>
+        <img class="project-img" src="عيدد-الاضحي-1.png" alt="إعلان عيد الأضحى الإبداعي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان عيد الأضحى الإبداعي</h3>
         <p class="project-desc">إعلان سينمائي لعيد الأضحى بأسلوب درامي مبتكر، يجسد فكرة الذبيحة بشكل فني جذاب ومؤثر.</p>
+        <div class="view-counter">👁️ 2.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="الملكة-1.png" alt="إعلان مكرونة الملكة" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'إعلان مكرونة الملكة')" title="مشاركة">🔗</button>
+        <img class="project-img" src="الملكة-1.png" alt="إعلان مكرونة الملكة" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان مكرونة الملكة</h3>
         <p class="project-desc">تصميم إعلاني عصري لمكرونة الملكة يركز على جودة المنتج ونقاء المكونات بألوان منعشة وجذابة.</p>
+        <div class="view-counter">👁️ 1.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="كرانشي.png" alt="إعلان كرانشي الحار" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'إعلان كرانشي الحار')" title="مشاركة">🔗</button>
+        <img class="project-img" src="كرانشي.png" alt="إعلان كرانشي الحار" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان كرانشي الحار</h3>
         <p class="project-desc">تصميم ديناميكي لمنتج كرانشي Flamin Hot يستخدم عناصر النار والحركة لنقل إحساس التشويق والقوة.</p>
+        <div class="view-counter">👁️ 3.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="mou.png" alt="الحكمدار — أحمد مكي" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'الحكمدار — أحمد مكي')" title="مشاركة">🔗</button>
+        <img class="project-img" src="mou.png" alt="الحكمدار — أحمد مكي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">الحكمدار — أحمد مكي</h3>
         <p class="project-desc">تصميم هوية بصرية كاملة لشيف أحمد مكي بما في ذلك الكارت الشخصي والسوشيال ميديا بأسلوب كلاسيكي أنيق.</p>
+        <div class="view-counter">👁️ 850</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="BIG-2.png" alt="حملة Big Chips" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'حملة Big Chips')" title="مشاركة">🔗</button>
+        <img class="project-img" src="BIG-2.png" alt="حملة Big Chips" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">حملة Big Chips</h3>
         <p class="project-desc">حملة إعلانية لمنتج Big Chips بفكرة مبتكرة تجسد وصول المنتج لكل مكان حول العالم بأسلوب مغامر وجريء.</p>
+        <div class="view-counter">👁️ 1.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="fx.png" alt="إعلان Bioderma الطبيعي" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'إعلان Bioderma الطبيعي')" title="مشاركة">🔗</button>
+        <img class="project-img" src="fx.png" alt="إعلان Bioderma الطبيعي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">إعلان Bioderma الطبيعي</h3>
         <p class="project-desc">تصميم إعلاني لمنتج Bioderma بأسلوب طبيعي مذهل يجمع بين الواقعية والخيال البصري في بيئة غابية ساحرة.</p>
+        <div class="view-counter">👁️ 2.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="xz.png" alt="إعلان Kangaroo Bags" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'إعلان Kangaroo Bags')" title="مشاركة">🔗</button>
+        <img class="project-img" src="xz.png" alt="إعلان Kangaroo Bags" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">إعلان Kangaroo Bags</h3>
         <p class="project-desc">تصميم إعلاني لحقائب Kangaroo Bags يبرز جودة المنتج والفخامة بإضاءة درامية وتفاصيل احترافية.</p>
+        <div class="view-counter">👁️ 1.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="hosam-hassan.png" alt="حسام حسن — Next Mission" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'حسام حسن — Next Mission')" title="مشاركة">🔗</button>
+        <img class="project-img" src="hosam-hassan.png" alt="حسام حسن — Next Mission" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">حسام حسن — Next Mission</h3>
         <p class="project-desc">تصميم رياضي لمدرب منتخب مصر حسام حسن بأسلوب درامي يعبر عن التحدي والمهمة القادمة في أمم أفريقيا.</p>
+        <div class="view-counter">👁️ 4.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="liverpool-x-madrid.png" alt="ليفربول vs ريال مدريد" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'ليفربول vs ريال مدريد')" title="مشاركة">🔗</button>
+        <img class="project-img" src="liverpool-x-madrid.png" alt="ليفربول vs ريال مدريد" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">ليفربول vs ريال مدريد</h3>
         <p class="project-desc">تصميم مباراة ليفربول وريال مدريد بدوري أبطال أوروبا بأسلوب سينمائي يعكس حماس المواجهة الكبرى.</p>
+        <div class="view-counter">👁️ 1.9K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="morocco-X-zambia.png" alt="المغرب vs زامبيا" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'المغرب vs زامبيا')" title="مشاركة">🔗</button>
+        <img class="project-img" src="morocco-X-zambia.png" alt="المغرب vs زامبيا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">المغرب vs زامبيا</h3>
         <p class="project-desc">تصميم Match Day لمنتخب المغرب ضد زامبيا بكأس أمم أفريقيا بأسلوب بطولي يبرز نجوم الفريق.</p>
+        <div class="view-counter">👁️ 2.7K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="nbe-alahly-X-alzmalek.png" alt="الأهلي vs الزمالك — السوبر" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs الزمالك — السوبر')" title="مشاركة">🔗</button>
+        <img class="project-img" src="nbe-alahly-X-alzmalek.png" alt="الأهلي vs الزمالك — السوبر" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">الأهلي vs الزمالك — السوبر</h3>
         <p class="project-desc">تصميم كلاسيكو الكرة المصرية بين الأهلي والزمالك على كأس السوبر بتفاصيل درامية وألوان نارية.</p>
+        <div class="view-counter">👁️ 3.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="الأهلي-x-سيراميكا.png" alt="الأهلي vs سيراميكا كليوباترا" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs سيراميكا كليوباترا')" title="مشاركة">🔗</button>
+        <img class="project-img" src="الأهلي-x-سيراميكا.png" alt="الأهلي vs سيراميكا كليوباترا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">الأهلي vs سيراميكا كليوباترا</h3>
         <p class="project-desc">تصميم مباراة الأهلي وسيراميكا كليوباترا بأسلوب ديناميكي يبرز حماس المنافسة والروح الرياضية.</p>
+        <div class="view-counter">👁️ 1.4K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="ساديو-ماني-نهائي-الامم.png" alt="ساديو ماني — نهائي الأمم" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'ساديو ماني — نهائي الأمم')" title="مشاركة">🔗</button>
+        <img class="project-img" src="ساديو-ماني-نهائي-الامم.png" alt="ساديو ماني — نهائي الأمم" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">ساديو ماني — نهائي الأمم</h3>
         <p class="project-desc">تصميم احتفالي لساديو ماني في نهائي أمم أفريقيا بأسلوب مسرحي يعكس الفخر والإنجاز البطولي.</p>
+        <div class="view-counter">👁️ 2.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="مصر-X-زيمبابوي.png" alt="مصر vs زيمبابوي" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'مصر vs زيمبابوي')" title="مشاركة">🔗</button>
+        <img class="project-img" src="مصر-X-زيمبابوي.png" alt="مصر vs زيمبابوي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">مصر vs زيمبابوي</h3>
         <p class="project-desc">تصميم Match Day لمنتخب مصر ضد زيمبابوي بألوان وطنية وروح بطولية تعكس عظمة الكرة المصرية.</p>
+        <div class="view-counter">👁️ 1.6K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="منتخب-مصر.png" alt="يوم المباراة — مصر vs إيران" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'يوم المباراة — مصر vs إيران')" title="مشاركة">🔗</button>
+        <img class="project-img" src="منتخب-مصر.png" alt="يوم المباراة — مصر vs إيران" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">يوم المباراة — مصر vs إيران</h3>
         <p class="project-desc">تصميم يوم المباراة لمنتخب مصر ضد إيران بأسلوب يجمع بين الهوية المصرية والحماس الرياضي العارم.</p>
+        <div class="view-counter">👁️ 2.9K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="منتخب-مصر-امم-افريقي.png" alt="منتخب مصر في أمم أفريقيا" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'منتخب مصر في أمم أفريقيا')" title="مشاركة">🔗</button>
+        <img class="project-img" src="منتخب-مصر-امم-افريقي.png" alt="منتخب مصر في أمم أفريقيا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">منتخب مصر في أمم أفريقيا</h3>
         <p class="project-desc">تصميم بطولي لمنتخب مصر في أمم أفريقيا يجسد روح الفريق الواحد والطموح في التتويج باللقب القاري.</p>
+        <div class="view-counter">👁️ 3.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="448468812_122152679426141956_2341648530807116964_n.jpg" alt="Megrosty Smile" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'Megrosty Smile')" title="مشاركة">🔗</button>
+        <img class="project-img" src="448468812_122152679426141956_2341648530807116964_n.jpg" alt="Megrosty Smile" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Megrosty Smile</h3>
         <p class="project-desc">هوية بصرية لمطعم Megrosty Smile بتصميم عصري يجمع بين الطابع الغذائي والشعار المميز بألوان حيوية.</p>
+        <div class="view-counter">👁️ 1.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="448507052_122152679666141956_959435827464419903_n.jpg" alt="Emasson Clothing" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'Emasson Clothing')" title="مشاركة">🔗</button>
+        <img class="project-img" src="448507052_122152679666141956_959435827464419903_n.jpg" alt="Emasson Clothing" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Emasson Clothing</h3>
         <p class="project-desc">شعار minimal أنيق لعلامة تجارية ملابس يعكس الأناقة والبساطة في آن واحد بأسلوب تيبوجرافي متقن.</p>
+        <div class="view-counter">👁️ 2.4K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="448524183_122152555394141956_9212771902099932621_n.jpg" alt="Ezoc Logistic" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'Ezoc Logistic')" title="مشاركة">🔗</button>
+        <img class="project-img" src="448524183_122152555394141956_9212771902099932621_n.jpg" alt="Ezoc Logistic" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Ezoc Logistic</h3>
         <p class="project-desc">هوية بصرية لشركة لوجستيات تجسد السرعة والكفاءة بأيقونة شاحنة ديناميكية وألوان حيوية.</p>
+        <div class="view-counter">👁️ 1.7K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="fd.png" alt="Mekawy Trade" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'Mekawy Trade')" title="مشاركة">🔗</button>
+        <img class="project-img" src="fd.png" alt="Mekawy Trade" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Mekawy Trade</h3>
         <p class="project-desc">شعار تجاري لشركة Mekawy Trade يجمع بين العناصر المالية والتجارية بتصميم عصري ومتوازن.</p>
+        <div class="view-counter">👁️ 2.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="Leonardo_Phoenix_A_luxurious_highend_logo_design_for_M_A_C_COS_3.jpg" alt="M.A.C Cosmetics — 3D" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — 3D')" title="مشاركة">🔗</button>
+        <img class="project-img" src="Leonardo_Phoenix_A_luxurious_highend_logo_design_for_M_A_C_COS_3.jpg" alt="M.A.C Cosmetics — 3D" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — 3D</h3>
         <p class="project-desc">تصميم لوجو ثلاثي الأبعاد فاخر لعلامة مستحضرات تجميل بأسلوب احترافي وعصري يعكس الفخامة.</p>
+        <div class="view-counter">👁️ 1.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_0.jpg" alt="M.A.C Cosmetics — Elegant" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Elegant')" title="مشاركة">🔗</button>
+        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_0.jpg" alt="M.A.C Cosmetics — Elegant" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — Elegant</h3>
         <p class="project-desc">تصميم لوجو أنيق وناعم لعلامة تجميل بأسلوب يعكس الفخامة والرقي بخطوط رشيقة وذهبي وردي.</p>
+        <div class="view-counter">👁️ 2.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_3.jpg" alt="M.A.C Cosmetics — Woman" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Woman')" title="مشاركة">🔗</button>
+        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_3.jpg" alt="M.A.C Cosmetics — Woman" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — Woman</h3>
         <p class="project-desc">تصميم لوجو يجسد جمال المرأة بأسلوب فني مبتكر لعلامة مستحضرات تجميل بظلال وردية ناعمة.</p>
+        <div class="view-counter">👁️ 3.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="ORJA091.png" alt="حياة حافظ إبراهيم" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'حياة حافظ إبراهيم')" title="مشاركة">🔗</button>
+        <img class="project-img" src="ORJA091.png" alt="حياة حافظ إبراهيم" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">حياة حافظ إبراهيم</h3>
         <p class="project-desc">تصميم غلاف كتاب أدبي بأسلوب كلاسيكي يجمع بين التراث والحداثة مع عناصر بصرية ترمز للشعر والأدب المصري.</p>
+        <div class="view-counter">👁️ 1.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="Untitled-1.png" alt="رفقاء الليل" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل')" title="مشاركة">🔗</button>
+        <img class="project-img" src="Untitled-1.png" alt="رفقاء الليل" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">رفقاء الليل</h3>
         <p class="project-desc">غلاف رواية رعب وغموض بأسلوب سينمائي مظلم يبني توتراً بصرياً يجذب القارئ من أول نظرة.</p>
+        <div class="view-counter">👁️ 2.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="Untitled-11.png" alt="رفقاء الليل — تصميم داخلي" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل — تصميم داخلي')" title="مشاركة">🔗</button>
+        <img class="project-img" src="Untitled-11.png" alt="رفقاء الليل — تصميم داخلي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">رفقاء الليل — تصميم داخلي</h3>
         <p class="project-desc">تصميم صفحات داخلية للرواية بأسلوب متناسق يحافظ على هوية العمل ويوفر تجربة قراءة مريحة وجذابة.</p>
+        <div class="view-counter">👁️ 3.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="غلاف الشموع السوداء.jpg" alt="الشموع السوداء" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, 'الشموع السوداء')" title="مشاركة">🔗</button>
+        <img class="project-img" src="غلاف الشموع السوداء.jpg" alt="الشموع السوداء" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">الشموع السوداء</h3>
         <p class="project-desc">غلاف رواية رعب نفسي بأسلوب درامي مظلم يجسد الصراع بين الحياة والموت في إطار تشويقي مثير.</p>
+        <div class="view-counter">👁️ 1.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="بوستر-6-أيام.jpg" alt="6 أيام" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        
+        <button class="share-btn" onclick="shareProject(event, '6 أيام')" title="مشاركة">🔗</button>
+        <img class="project-img" src="بوستر-6-أيام.jpg" alt="6 أيام" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">6 أيام</h3>
         <p class="project-desc">بوستر فيلم درامي رومانسي بأسلوب سينمائي يجمع بين العواطف والتشويق بإضاءة درامية مذهلة.</p>
+        <div class="view-counter">👁️ 2.6K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="بوستر-سفاح-التجمع.png" alt="سفاح التجمع — البوستر الرئيسي" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        <div class="new-badge">جديد</div>
+        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الرئيسي')" title="مشاركة">🔗</button>
+        <img class="project-img" src="بوستر-سفاح-التجمع.png" alt="سفاح التجمع — البوستر الرئيسي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البوستر الرئيسي</h3>
         <p class="project-desc">بوستر فيلم سفاح التجمع بأسلوب جريء يعكس طابع الإثارة والغموض مع تأثيرات زجاج مكسور دموية.</p>
+        <div class="view-counter">👁️ 1.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="بوستر-سفاح-التجمع-2.png-2000-2500.png" alt="سفاح التجمع — البوستر الثاني" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        <div class="new-badge">جديد</div>
+        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الثاني')" title="مشاركة">🔗</button>
+        <img class="project-img" src="بوستر-سفاح-التجمع-2.png-2000-2500.png" alt="سفاح التجمع — البوستر الثاني" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البوستر الثاني</h3>
         <p class="project-desc">بوستر بديل لفيلم سفاح التجمع يركز على الجانب النفسي للشخصية بإضاءة حمراء درامية وتأثيرات مرآة.</p>
+        <div class="view-counter">👁️ 980</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <img class="project-img" src="سفاح-التجمع.png" alt="سفاح التجمع — البانر العريض" loading="lazy">
+        <div class="skeleton-overlay skeleton"></div>
+        <div class="new-badge">جديد</div>
+        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البانر العريض')" title="مشاركة">🔗</button>
+        <img class="project-img" src="سفاح-التجمع.png" alt="سفاح التجمع — البانر العريض" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
         <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البانر العريض</h3>
         <p class="project-desc">تصميم بانر عريض للفيلم يجمع بين كل الشخصيات الرئيسية في إطار واحد مثير بتأثيرات زجاج مكسور.</p>
+        <div class="view-counter">👁️ 2.5K</div>
       </div>
     </div>
   </div>
@@ -774,13 +1290,11 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
   </div>
   <div class="videos-grid reveal">
     <div class="video-card">
-      <div class="video-wrapper">
-        <iframe 
-          src="https://drive.google.com/file/d/1f0Q6j9CXS0jLLNC9oVekSegR8I3489Bv/preview" 
-          allow="autoplay; fullscreen" 
-          allowfullscreen
-          loading="lazy">
-        </iframe>
+      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1f0Q6j9CXS0jLLNC9oVekSegR8I3489Bv/preview">
+        <div class="video-placeholder" onclick="loadVideo(this)">
+          <div class="play-icon">▶</div>
+          <p>اضغط للتشغيل</p>
+        </div>
       </div>
       <div class="video-info">
         <h3>فيديو كليب — لعله خير</h3>
@@ -788,13 +1302,11 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
       </div>
     </div>
     <div class="video-card">
-      <div class="video-wrapper">
-        <iframe 
-          src="https://drive.google.com/file/d/10oT1N-vnLDQ8q8Fm6gU1FLkEBdhZoczh/preview" 
-          allow="autoplay; fullscreen" 
-          allowfullscreen
-          loading="lazy">
-        </iframe>
+      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/10oT1N-vnLDQ8q8Fm6gU1FLkEBdhZoczh/preview">
+        <div class="video-placeholder" onclick="loadVideo(this)">
+          <div class="play-icon">▶</div>
+          <p>اضغط للتشغيل</p>
+        </div>
       </div>
       <div class="video-info">
         <h3>فيديو كليب — طول الوقت</h3>
@@ -802,13 +1314,11 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
       </div>
     </div>
     <div class="video-card">
-      <div class="video-wrapper">
-        <iframe 
-          src="https://drive.google.com/file/d/1JLT3xWDRemP0APCoonZzGIOELrkTrv03/preview" 
-          allow="autoplay; fullscreen" 
-          allowfullscreen
-          loading="lazy">
-        </iframe>
+      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1JLT3xWDRemP0APCoonZzGIOELrkTrv03/preview">
+        <div class="video-placeholder" onclick="loadVideo(this)">
+          <div class="play-icon">▶</div>
+          <p>اضغط للتشغيل</p>
+        </div>
       </div>
       <div class="video-info">
         <h3>إعلان قنواتي</h3>
@@ -816,13 +1326,11 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
       </div>
     </div>
     <div class="video-card">
-      <div class="video-wrapper">
-        <iframe 
-          src="https://drive.google.com/file/d/1Za3NnQ8zdg97p6S-URs8gHJFxAHxTC8A/preview" 
-          allow="autoplay; fullscreen" 
-          allowfullscreen
-          loading="lazy">
-        </iframe>
+      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1Za3NnQ8zdg97p6S-URs8gHJFxAHxTC8A/preview">
+        <div class="video-placeholder" onclick="loadVideo(this)">
+          <div class="play-icon">▶</div>
+          <p>اضغط للتشغيل</p>
+        </div>
       </div>
       <div class="video-info">
         <h3>إعلان عطر فرنسي</h3>
@@ -1028,6 +1536,12 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
 </footer>
 
 <!-- Lightbox -->
+
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="العودة للأعلى">↑</button>
+<button class="focus-toggle" id="focusToggle" onclick="toggleFocusMode()" title="وضع التركيز">🎯</button>
+<div class="toast" id="toast"></div>
+<canvas id="particleBurst"></canvas>
+
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-close" onclick="closeLightboxBtn(event)">✕</div>
   <img class="lightbox-img" id="lightboxImg" src="" alt="">
@@ -1621,6 +2135,312 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+// ===== Back to Top =====
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 500) backToTop.classList.add('visible');
+  else backToTop.classList.remove('visible');
+});
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Mobile Menu =====
+function toggleMobileMenu() {
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('mobileNav').classList.toggle('active');
+  document.getElementById('mobileOverlay').classList.toggle('active');
+  document.body.style.overflow = document.getElementById('mobileNav').classList.contains('active') ? 'hidden' : '';
+}
+
+// ===== Active Nav Link Highlighting =====
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.getAttribute('id');
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.section === id);
+      });
+      mobileNavLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(section => sectionObserver.observe(section));
+
+// ===== Image Error Handler =====
+function handleImageError(img) {
+  img.onerror = null;
+  img.style.display = 'none';
+  const wrap = img.closest('.project-img-wrap');
+  if (wrap) {
+    wrap.classList.add('img-error');
+    wrap.innerHTML = '<span>الصورة غير متوفرة</span>';
+  }
+}
+
+// ===== Video Lazy Loading =====
+function loadVideo(placeholder) {
+  const wrapper = placeholder.closest('.video-lazy');
+  const src = wrapper.dataset.src;
+  wrapper.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>`;
+}
+
+// Intersection Observer for auto-loading videos when visible
+const videoObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const placeholder = entry.target.querySelector('.video-placeholder');
+      if (placeholder) loadVideo(placeholder);
+      videoObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.video-lazy').forEach(v => videoObserver.observe(v));
+
+// ===== Copy to Clipboard =====
+function showToast(message, icon = '✅') {
+  const toast = document.getElementById('toast');
+  toast.innerHTML = `${icon} ${message}`;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+document.querySelectorAll('.contact-card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    const text = card.querySelector('p').textContent.trim();
+    if (text.includes('@') || text.startsWith('+')) {
+      e.preventDefault();
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('تم النسخ إلى الحافظة');
+      }).catch(() => {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('تم النسخ إلى الحافظة');
+      });
+    }
+  });
+});
+
+// ===== Parallax Scroll =====
+const parallaxImg = document.getElementById('aboutParallaxImg');
+if (parallaxImg) {
+  window.addEventListener('scroll', () => {
+    const rect = parallaxImg.closest('.about-image-frame').getBoundingClientRect();
+    const speed = 0.15;
+    const yPos = -(rect.top * speed);
+    parallaxImg.style.transform = `translateY(${yPos}px) scale(1.1)`;
+  });
+}
+
+// ===== Particle Burst on Click =====
+const burstCanvas = document.getElementById('particleBurst');
+const burstCtx = burstCanvas.getContext('2d');
+let burstParticles = [];
+
+function resizeBurst() {
+  burstCanvas.width = window.innerWidth;
+  burstCanvas.height = window.innerHeight;
+}
+resizeBurst();
+window.addEventListener('resize', resizeBurst);
+
+class BurstParticle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = (Math.random() - 0.5) * 12;
+    this.vy = (Math.random() - 0.5) * 12;
+    this.life = 1;
+    this.decay = Math.random() * 0.02 + 0.015;
+    this.size = Math.random() * 4 + 2;
+    this.color = `hsl(${Math.random() * 60 + 240}, 80%, 70%)`;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.3; // gravity
+    this.life -= this.decay;
+    this.size *= 0.96;
+  }
+  draw() {
+    burstCtx.globalAlpha = this.life;
+    burstCtx.fillStyle = this.color;
+    burstCtx.beginPath();
+    burstCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    burstCtx.fill();
+    burstCtx.globalAlpha = 1;
+  }
+}
+
+function spawnBurst(x, y) {
+  for (let i = 0; i < 20; i++) {
+    burstParticles.push(new BurstParticle(x, y));
+  }
+}
+
+function animateBurst() {
+  burstCtx.clearRect(0, 0, burstCanvas.width, burstCanvas.height);
+  burstParticles = burstParticles.filter(p => p.life > 0);
+  burstParticles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateBurst);
+}
+animateBurst();
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('button, .btn, .project-card, .contact-card, .filter-btn, .share-btn, .submit-btn, .theme-toggle, .focus-toggle, .back-to-top, .hamburger')) {
+    spawnBurst(e.clientX, e.clientY);
+  }
+});
+
+// ===== Smooth Counter Easing =====
+function easeOutExpo(t) {
+  return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+}
+
+const smoothCounterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const target = parseInt(entry.target.dataset.target);
+      const suffix = entry.target.dataset.suffix || '';
+      const numberEl = entry.target.querySelector('.stat-number');
+      const duration = 2000;
+      const startTime = performance.now();
+
+      function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOutExpo(progress);
+        const current = Math.floor(eased * target);
+        numberEl.textContent = current + suffix;
+        if (progress < 1) requestAnimationFrame(updateCounter);
+        else numberEl.textContent = target + suffix;
+      }
+      requestAnimationFrame(updateCounter);
+      smoothCounterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+statItems.forEach(item => {
+  counterObserver.unobserve(item);
+  smoothCounterObserver.observe(item);
+});
+
+// ===== Focus Mode =====
+function toggleFocusMode() {
+  document.body.classList.toggle('focus-mode');
+  const isFocus = document.body.classList.contains('focus-mode');
+  document.getElementById('focusToggle').textContent = isFocus ? '🔕' : '🎯';
+  showToast(isFocus ? 'وضع التركيز مفعل' : 'وضع التركيز معطل', isFocus ? '🧘' : '✨');
+}
+
+// ===== Share Project =====
+function shareProject(e, title) {
+  e.stopPropagation();
+  const url = window.location.href;
+  if (navigator.share) {
+    navigator.share({ title: title, url: url });
+  } else {
+    navigator.clipboard.writeText(`${title} - ${url}`).then(() => {
+      showToast('تم نسخ رابط المشروع');
+    });
+  }
+}
+
+// ===== Improved Cursor (requestAnimationFrame) =====
+if (window.innerWidth > 768 && currentTheme === 'dark') {
+  let cursorX = 0, cursorY = 0;
+  let currentX = 0, currentY = 0;
+  let lightX = 0, lightY = 0;
+  let lightCurrentX = 0, lightCurrentY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+  });
+
+  function animateCursor() {
+    currentX += (cursorX - currentX) * 0.15;
+    currentY += (cursorY - currentY) * 0.15;
+    lightCurrentX += (cursorX - lightCurrentX) * 0.08;
+    lightCurrentY += (cursorY - lightCurrentY) * 0.08;
+
+    cursor.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+    cursorLight.style.transform = `translate(${lightCurrentX}px, ${lightCurrentY}px) translate(-50%, -50%)`;
+
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+}
+
+// ===== Masonry Layout Adjustment =====
+function adjustMasonry() {
+  const grid = document.getElementById('projectsGrid');
+  if (!grid || window.innerWidth <= 768) return;
+  const cards = grid.querySelectorAll('.project-card');
+  cards.forEach(card => {
+    const img = card.querySelector('.project-img');
+    if (img && img.naturalHeight) {
+      const ratio = img.naturalHeight / img.naturalWidth;
+      if (ratio > 1.2) card.style.gridRowEnd = 'span 2';
+    }
+  });
+}
+
+window.addEventListener('load', adjustMasonry);
+window.addEventListener('resize', adjustMasonry);
+
+// ===== Enhanced Lightbox with Keyboard Nav =====
+let currentLightboxIndex = 0;
+const lightboxImages = [];
+
+document.querySelectorAll('.project-card').forEach((card, idx) => {
+  const img = card.querySelector('.project-img');
+  const title = card.querySelector('.project-title').textContent;
+  if (img) lightboxImages.push({ src: img.src, title: title });
+
+  const wrap = card.querySelector('.project-img-wrap');
+  if (wrap) {
+    wrap.addEventListener('click', () => {
+      currentLightboxIndex = idx;
+    });
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'ArrowRight') {
+    currentLightboxIndex = (currentLightboxIndex + 1) % lightboxImages.length;
+    updateLightboxImage();
+  } else if (e.key === 'ArrowLeft') {
+    currentLightboxIndex = (currentLightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+    updateLightboxImage();
+  }
+});
+
+function updateLightboxImage() {
+  const item = lightboxImages[currentLightboxIndex];
+  lightboxImg.src = item.src;
+  lightboxCaption.textContent = item.title;
+  if (magnifierGlass.style.display === 'block') {
+    magnifierGlass.style.backgroundImage = `url(${item.src})`;
+  }
+}
+
 </script>
 </body>
 </html>
