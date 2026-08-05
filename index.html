@@ -43,10 +43,10 @@ body { background: var(--bg); color: var(--text); overflow-x: hidden; cursor: no
 .space-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 1; transition: opacity 0.6s ease; }
 [data-theme="light"] .space-bg { opacity: 0; }
 .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--primary), var(--accent)); z-index: 10002; width: 0%; transition: width 0.1s; }
-.cursor { position: fixed; width: 12px; height: 12px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s, background 0.2s; mix-blend-mode: difference; }
+.cursor { position: fixed; top: 0; left: 0; width: 12px; height: 12px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate3d(-50%,-50%,0); transition: width 0.2s, height 0.2s, background 0.2s, border 0.2s; mix-blend-mode: difference; will-change: transform; }
 .cursor.hover { width: 45px; height: 45px; background: rgba(102,126,234,0.15); border: 2px solid var(--primary); }
 .cursor.click { width: 20px; height: 20px; background: var(--accent); }
-.cursor-light { position: fixed; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.04) 40%, transparent 70%); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: opacity 0.3s; mix-blend-mode: screen; }
+.cursor-light { position: fixed; top: 0; left: 0; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.04) 40%, transparent 70%); pointer-events: none; z-index: 9998; transform: translate3d(-50%,-50%,0); transition: opacity 0.3s; mix-blend-mode: screen; will-change: transform; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--darker); }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 4px; }
@@ -1673,22 +1673,73 @@ window.addEventListener('scroll', () => {
 const cursor = document.getElementById('cursor');
 const cursorLight = document.getElementById('cursorLight');
 
-if (window.innerWidth > 768 && currentTheme === 'dark') {
+
+
+// ===== Fixed Custom Cursor (60fps RAF) =====
+(function() {
+  if (window.innerWidth <= 768 || currentTheme === 'light') return;
+
+  let targetX = 0, targetY = 0;
+  let cursorX = 0, cursorY = 0;
+  let lightX = 0, lightY = 0;
+  let lightCurrentX = 0, lightCurrentY = 0;
+  let isActive = true;
+  let rafId = null;
+
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    cursorLight.style.left = e.clientX + 'px';
-    cursorLight.style.top = e.clientY + 'px';
+    targetX = e.clientX;
+    targetY = e.clientY;
+    if (!isActive) {
+      isActive = true;
+      animateCursor();
+    }
   });
 
-  document.querySelectorAll('a, button, .project-card, .contact-card, .filter-btn, .project-img-wrap, .lightbox-close, .social-link, .submit-btn, .theme-toggle, .video-placeholder, .slider-button').forEach(el => {
+  document.addEventListener('mouseleave', () => { isActive = false; });
+  document.addEventListener('mouseenter', () => { 
+    isActive = true; 
+    animateCursor(); 
+  });
+
+  function animateCursor() {
+    if (!isActive) return;
+
+    // Cursor follows instantly (0.25 lerp for smoothness)
+    cursorX += (targetX - cursorX) * 0.25;
+    cursorY += (targetY - cursorY) * 0.25;
+
+    // Light follows slower (0.08 lerp for trailing effect)
+    lightCurrentX += (targetX - lightCurrentX) * 0.08;
+    lightCurrentY += (targetY - lightCurrentY) * 0.08;
+
+    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate3d(-50%, -50%, 0)`;
+    cursorLight.style.transform = `translate3d(${lightCurrentX}px, ${lightCurrentY}px, 0) translate3d(-50%, -50%, 0)`;
+
+    rafId = requestAnimationFrame(animateCursor);
+  }
+
+  // Hover states
+  const hoverTargets = 'a, button, .project-card, .contact-card, .filter-btn, .project-img-wrap, .lightbox-close, .social-link, .submit-btn, .theme-toggle, .focus-toggle, .back-to-top, .hamburger, .share-btn';
+  document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 
+  // Click states
   document.addEventListener('mousedown', () => cursor.classList.add('click'));
   document.addEventListener('mouseup', () => cursor.classList.remove('click'));
-}
+
+  // Start animation
+  animateCursor();
+
+  // Cleanup on theme change
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'theme' && e.newValue === 'light') {
+      isActive = false;
+      if (rafId) cancelAnimationFrame(rafId);
+    }
+  });
+})();
 
 // Particle Network
 const canvas = document.getElementById('particleCanvas');
@@ -2361,31 +2412,7 @@ function shareProject(e, title) {
   }
 }
 
-// ===== Improved Cursor (requestAnimationFrame) =====
-if (window.innerWidth > 768 && currentTheme === 'dark') {
-  let cursorX = 0, cursorY = 0;
-  let currentX = 0, currentY = 0;
-  let lightX = 0, lightY = 0;
-  let lightCurrentX = 0, lightCurrentY = 0;
 
-  document.addEventListener('mousemove', (e) => {
-    cursorX = e.clientX;
-    cursorY = e.clientY;
-  });
-
-  function animateCursor() {
-    currentX += (cursorX - currentX) * 0.15;
-    currentY += (cursorY - currentY) * 0.15;
-    lightCurrentX += (cursorX - lightCurrentX) * 0.08;
-    lightCurrentY += (cursorY - lightCurrentY) * 0.08;
-
-    cursor.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
-    cursorLight.style.transform = `translate(${lightCurrentX}px, ${lightCurrentY}px) translate(-50%, -50%)`;
-
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-}
 
 // ===== Masonry Layout Adjustment =====
 function adjustMasonry() {
