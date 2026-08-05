@@ -13,35 +13,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
-  --primary: #ff6b35;
-  --secondary: #ff8c42;
-  --accent: #ffb347;
+  --primary: #667eea;
+  --secondary: #764ba2;
+  --accent: #f093fb;
   --dark: #0a0a0a;
   --darker: #050505;
-  --card: rgba(20, 20, 20, 0.6);
+  --card: #111111;
   --text: #ffffff;
-  --text-muted: #a0a0a0;
-  --border: rgba(255, 107, 53, 0.15);
+  --text-muted: #888888;
+  --border: #222222;
   --bg: var(--dark);
   --surface: var(--card);
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --orange-glow: rgba(255, 107, 53, 0.4);
 }
 [data-theme="light"] {
-  --dark: #faf8f5;
+  --dark: #f5f5f7;
   --darker: #ffffff;
-  --card: rgba(255, 255, 255, 0.7);
+  --card: #ffffff;
   --text: #1a1a1a;
   --text-muted: #666666;
-  --border: rgba(255, 107, 53, 0.2);
-  --bg: #faf8f5;
-  --surface: rgba(255, 255, 255, 0.7);
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-shadow: 0 8px 32px rgba(255, 107, 53, 0.08);
-  --orange-glow: rgba(255, 107, 53, 0.15);
+  --border: #e0e0e0;
+  --bg: #f5f5f7;
+  --surface: #ffffff;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 html { scroll-behavior: smooth; }
@@ -50,360 +42,130 @@ body { background: var(--bg); color: var(--text); overflow-x: hidden; cursor: no
 [data-theme="light"] .cursor, [data-theme="light"] .cursor-light { display: none !important; }
 .space-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 1; transition: opacity 0.6s ease; }
 [data-theme="light"] .space-bg { opacity: 0; }
-.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #ff6b35, #ffb347); z-index: 10002; width: 0%; transition: width 0.1s; }
-.cursor { position: fixed; top: 0; left: 0; width: 12px; height: 12px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate3d(-50%,-50%,0); transition: width 0.2s, height 0.2s, background 0.2s, border 0.2s; mix-blend-mode: difference; will-change: transform; }
+.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--primary), var(--accent)); z-index: 10002; width: 0%; transition: width 0.1s; }
+.cursor { position: fixed; width: 12px; height: 12px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s, background 0.2s; mix-blend-mode: difference; }
 .cursor.hover { width: 45px; height: 45px; background: rgba(102,126,234,0.15); border: 2px solid var(--primary); }
 .cursor.click { width: 20px; height: 20px; background: var(--accent); }
-.cursor-light { position: fixed; top: 0; left: 0; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, rgba(255,140,66,0.05) 40%, transparent 70%); pointer-events: none; z-index: 9998; transform: translate3d(-50%,-50%,0); transition: opacity 0.3s; mix-blend-mode: screen; will-change: transform; }
+.cursor-light { position: fixed; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.04) 40%, transparent 70%); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: opacity 0.3s; mix-blend-mode: screen; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--darker); }
-::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ff6b35, #ff8c42); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 4px; }
 .preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--darker); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s; }
 .preloader.hidden { opacity: 0; visibility: hidden; }
-.preloader-icon { margin-bottom: 24px; animation: iconFloat 2s ease infinite; filter: drop-shadow(0 0 30px rgba(255,107,53,0.5)); }
-.preloader-icon svg { animation: iconGlow 2s ease infinite alternate; }
-.preloader-text { font-size: 3em; font-weight: 900; background: linear-gradient(135deg, #ff6b35, #ff8c42, #ffb347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: pulse 1.5s ease infinite; }
-.preloader-sub { font-size: 1em; color: var(--text-muted); margin-top: 8px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
-.preloader-bar { width: 200px; height: 3px; background: var(--border); border-radius: 3px; margin-top: 30px; overflow: hidden; }
-.preloader-bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; animation: loadBar 2s ease forwards; box-shadow: 0 0 10px var(--primary); }
+.preloader-text { font-size: 3.5em; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: pulse 1.5s ease infinite; }
+.preloader-bar { width: 250px; height: 3px; background: var(--border); border-radius: 3px; margin-top: 30px; overflow: hidden; }
+.preloader-bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; animation: loadBar 2s ease forwards; }
 @keyframes loadBar { to { width: 100%; } }
-@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.98); } }
-@keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes iconGlow { from { filter: drop-shadow(0 0 20px rgba(255,107,53,0.4)); } to { filter: drop-shadow(0 0 40px rgba(255,140,66,0.7)); } }
-
-/* ===== Icon Glow Effect ===== */
-.icon { 
-  display: inline-block; 
-  vertical-align: middle; 
-  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
-  transition: filter 0.3s;
-}
-.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
-  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
-}
-.project-card:hover .project-overlay .icon {
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-}
-.nav-links a:hover .icon, .mobile-nav a:hover .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
-}
-.hero-badge .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
-}
-
-@media (max-width: 768px) {
-  .preloader-text { font-size: 2em; }
-  .preloader-sub { font-size: 0.8em; }
-  .preloader-icon svg { width: 60px; height: 60px; }
-  .preloader-bar { width: 150px; }
-}
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.98); } }
 
 /* Theme Toggle */
-.theme-toggle { 
-  position: fixed; 
-  top: 90px; 
-  left: 20px; 
-  z-index: 10003; 
-  width: 50px; 
-  height: 50px; 
-  border-radius: 50%; 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border); 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  cursor: none; 
-  font-size: 1.3em; 
-  transition: all 0.3s; 
-  box-shadow: var(--glass-shadow);
-}
-.theme-toggle:hover { transform: scale(1.1) rotate(15deg); border-color: rgba(255, 107, 53, 0.4); box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2); }
-[data-theme="light"] .theme-toggle { color: #ff6b35; }
+.theme-toggle { position: fixed; top: 90px; left: 20px; z-index: 10003; width: 50px; height: 50px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: none; font-size: 1.3em; transition: all 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+.theme-toggle:hover { transform: scale(1.1) rotate(15deg); border-color: var(--primary); }
+[data-theme="light"] .theme-toggle { color: #f5a623; }
 
 nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
 [data-theme="light"] nav { background: rgba(255,255,255,0.85); border-bottom: 1px solid rgba(0,0,0,0.05); }
 nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 [data-theme="light"] nav.scrolled { background: rgba(255,255,255,0.95); }
-.logo { font-size: 1.5em; font-weight: 800; background: linear-gradient(135deg, #ff6b35, #ffb347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.nav-links { display: flex; gap: 28px; list-style: none; }
-.nav-links a { font-size: 0.9em; }
+.logo { font-size: 1.5em; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nav-links { display: flex; gap: 35px; list-style: none; }
 .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95em; transition: color 0.3s; position: relative; }
-.nav-links a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 2px; background: linear-gradient(90deg, #ff6b35, #ffb347); transition: width 0.3s; border-radius: 2px; }
+.nav-links a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 2px; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.3s; border-radius: 2px; }
 .nav-links a:hover { color: var(--text); }
 .nav-links a:hover::after { width: 100%; }
 #particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
 /* Marquee */
-.marquee-container { width: 100%; overflow: hidden; background: linear-gradient(90deg, rgba(255,107,53,0.9), rgba(255,140,66,0.9)); backdrop-filter: blur(10px); padding: 10px 0; position: relative; z-index: 3; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
+.marquee-container { width: 100%; overflow: hidden; background: linear-gradient(90deg, var(--primary), var(--secondary)); padding: 12px 0; position: relative; z-index: 3; margin-top: 20px; }
 .marquee-track { display: flex; width: max-content; animation: marquee 25s linear infinite; }
 .marquee-text { color: #fff; font-weight: 700; font-size: 0.95em; white-space: nowrap; padding: 0 40px; display: flex; align-items: center; gap: 15px; }
 .marquee-text span { opacity: 0.8; }
 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 40px 60px; position: relative; overflow: hidden; background: radial-gradient(ellipse at center, rgba(255,107,53,0.08) 0%, transparent 60%); }
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 40px 60px; position: relative; overflow: hidden; background: radial-gradient(ellipse at center, rgba(102,126,234,0.06) 0%, transparent 60%); }
 .hero-content { position: relative; z-index: 2; max-width: 900px; }
-.hero-avatar { 
-  width: 100%; 
-  height: 100%; 
-  border-radius: 50%; 
-  object-fit: cover; 
-  border: 3px solid rgba(255,255,255,0.2); 
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 0 40px rgba(255,107,53,0.3);
-} box-shadow: 0 0 60px rgba(102,126,234,0.3), 0 0 120px rgba(118,75,162,0.15); animation: fadeInUp 1s ease, avatarGlow 3s ease infinite alternate; }
-
-.hero-avatar-wrap { position: relative; display: inline-block; margin-bottom: clamp(16px, 3vw, 30px); width: clamp(100px, 22vw, 180px); height: clamp(100px, 22vw, 180px); }
-.hero-avatar-glow {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 110%;
-  height: 110%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,107,53,0.5) 0%, rgba(255,140,66,0.2) 50%, transparent 70%);
-  z-index: 0;
-  animation: avatarPulse 3s ease infinite;
-}
-.hero-avatar-glow::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 85%; height: 85%;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ff6b35, #ff8c42);
-  z-index: -1;
-  opacity: 0.9;
-}
-.avatar-fallback {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ff6b35, #ff8c42);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 2em;
-  font-weight: 800;
-  z-index: 1;
-}
-@keyframes avatarPulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
-  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-}
-
-@keyframes avatarGlow { from { box-shadow: 0 0 60px rgba(255,107,53,0.3), 0 0 120px rgba(255,140,66,0.15); } to { box-shadow: 0 0 90px rgba(255,107,53,0.5), 0 0 180px rgba(255,179,71,0.25); } }
-.hero-badge { display: inline-block; padding: 8px 24px; border-radius: 50px; background: rgba(255, 107, 53, 0.1); border: 1px solid rgba(255, 107, 53, 0.3); color: #ff6b35; font-size: 0.9em; font-weight: 600; margin-bottom: 25px; animation: fadeInUp 1s ease; }
-.hero h1 { font-size: clamp(1.6em, 4.5vw, 3.5em); font-weight: 900; line-height: 1.2; margin-bottom: 16px; animation: fadeInUp 1s ease 0.2s both; max-width: 900px; margin-left: auto; margin-right: auto; }
-.hero h1 .gradient { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 50%, #ffb347 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero-subtitle { font-size: clamp(0.9em, 2.5vw, 1.4em); color: var(--text-muted); font-weight: 300; margin-bottom: 20px; animation: fadeInUp 1s ease 0.4s both; min-height: 1.6em; }
-.hero-desc { font-size: clamp(0.85em, 2vw, 1.05em); color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; line-height: 1.9; animation: fadeInUp 1s ease 0.6s both; padding: 0 10px; }
+.hero-avatar { width: 170px; height: 170px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(102,126,234,0.4); margin-bottom: 30px; box-shadow: 0 0 60px rgba(102,126,234,0.3), 0 0 120px rgba(118,75,162,0.15); animation: fadeInUp 1s ease, avatarGlow 3s ease infinite alternate; }
+@keyframes avatarGlow { from { box-shadow: 0 0 60px rgba(102,126,234,0.3), 0 0 120px rgba(118,75,162,0.15); } to { box-shadow: 0 0 90px rgba(102,126,234,0.5), 0 0 180px rgba(240,147,251,0.25); } }
+.hero-badge { display: inline-block; padding: 8px 24px; border-radius: 50px; background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.3); color: var(--primary); font-size: 0.9em; font-weight: 600; margin-bottom: 25px; animation: fadeInUp 1s ease; }
+.hero h1 { font-size: 4em; font-weight: 900; line-height: 1.1; margin-bottom: 20px; animation: fadeInUp 1s ease 0.2s both; }
+.hero h1 .gradient { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-subtitle { font-size: 1.4em; color: var(--text-muted); font-weight: 300; margin-bottom: 20px; animation: fadeInUp 1s ease 0.4s both; min-height: 2em; }
+.hero-desc { font-size: 1.05em; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; line-height: 1.9; animation: fadeInUp 1s ease 0.6s both; }
 .hero-buttons { display: flex; gap: 20px; justify-content: center; animation: fadeInUp 1s ease 0.8s both; }
 .btn { padding: 15px 35px; border-radius: 50px; font-weight: 700; font-size: 1em; text-decoration: none; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); border: none; cursor: none; display: inline-flex; align-items: center; gap: 10px; position: relative; overflow: hidden; }
-.btn-primary { 
-  background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(255,140,66,0.9)); 
-  color: #fff; 
-  box-shadow: 0 10px 30px rgba(255,107,53,0.25), inset 0 1px 0 rgba(255,255,255,0.15); 
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.btn-primary:hover { 
-  transform: translateY(-3px); 
-  box-shadow: 0 20px 40px rgba(255,107,53,0.35), inset 0 1px 0 rgba(255,255,255,0.2); 
-  background: linear-gradient(135deg, rgba(255,107,53,1), rgba(255,140,66,1));
-}
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; box-shadow: 0 10px 30px rgba(102,126,234,0.3); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(102,126,234,0.4); }
 .btn-primary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
 .btn-primary:hover::before { left: 100%; }
-.btn-outline { 
-  background: rgba(255,255,255,0.03); 
-  color: var(--text); 
-  border: 1px solid rgba(255,255,255,0.1); 
-  backdrop-filter: blur(10px);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.btn-outline:hover { 
-  border-color: rgba(255,107,53,0.5); 
-  background: rgba(255,107,53,0.08); 
-  box-shadow: 0 8px 25px rgba(255,107,53,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
-}
-
-/* ===== Orange Glow Spots ===== */
-.glow-spot {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.35;
-}
-.glow-spot-1 {
-  width: 350px; height: 350px;
-  background: radial-gradient(circle, rgba(255,107,53,0.4) 0%, transparent 70%);
-  top: 5%; right: 10%;
-  animation: glowFloat 10s ease infinite;
-}
-.glow-spot-2 {
-  width: 250px; height: 250px;
-  background: radial-gradient(circle, rgba(255,140,66,0.3) 0%, transparent 70%);
-  bottom: 20%; left: 5%;
-  animation: glowFloat 12s ease infinite reverse;
-}
-.glow-spot-3 {
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(255,179,71,0.2) 0%, transparent 70%);
-  top: 50%; left: 60%;
-  animation: glowFloat 15s ease infinite;
-}
-@keyframes glowFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(15px, -15px) scale(1.05); }
-  66% { transform: translate(-10px, 10px) scale(0.98); }
-}
-[data-theme="light"] .glow-spot { opacity: 0.15; }
-
+.btn-outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
+.btn-outline:hover { border-color: var(--primary); background: rgba(102,126,234,0.05); }
 .float-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; pointer-events: none; }
-.orb-1 { width: 400px; height: 400px; background: #ff6b35; top: 10%; left: -10%; animation: float 8s ease infinite; opacity: 0.2; }
-.orb-2 { width: 300px; height: 300px; background: #ff8c42; bottom: 10%; right: -5%; animation: float 10s ease infinite reverse; opacity: 0.15; }
-.orb-3 { width: 200px; height: 200px; background: #ffb347; top: 50%; left: 50%; animation: float 12s ease infinite; opacity: 0.12; }
+.orb-1 { width: 400px; height: 400px; background: var(--primary); top: 10%; left: -10%; animation: float 8s ease infinite; }
+.orb-2 { width: 300px; height: 300px; background: var(--secondary); bottom: 10%; right: -5%; animation: float 10s ease infinite reverse; }
+.orb-3 { width: 200px; height: 200px; background: var(--accent); top: 50%; left: 50%; animation: float 12s ease infinite; }
 @keyframes float { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-30px) scale(1.1); } 66% { transform: translate(-20px,20px) scale(0.9); } }
 
 .section { padding: 100px 40px; max-width: 1300px; margin: 0 auto; position: relative; }
 .section-header { text-align: center; margin-bottom: 60px; }
-.section-label { display: inline-block; padding: 6px 20px; border-radius: 50px; background: rgba(255, 107, 53, 0.1); border: 1px solid rgba(255, 107, 53, 0.2); color: #ff6b35; font-size: 0.85em; font-weight: 600; margin-bottom: 15px; }
+.section-label { display: inline-block; padding: 6px 20px; border-radius: 50px; background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.2); color: var(--primary); font-size: 0.85em; font-weight: 600; margin-bottom: 15px; }
 .section-title { font-size: 2.8em; font-weight: 800; margin-bottom: 15px; }
 .section-desc { color: var(--text-muted); font-size: 1.1em; max-width: 600px; margin: 0 auto; line-height: 1.8; }
 
 /* Floating Stars */
 .floating-stars { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-.star { position: absolute; width: 4px; height: 4px; background: #ff8c42; border-radius: 50%; opacity: 0; animation: starFloat linear infinite; box-shadow: 0 0 10px rgba(255,140,66,0.6); }
+.star { position: absolute; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; opacity: 0; animation: starFloat linear infinite; box-shadow: 0 0 10px var(--primary); }
 @keyframes starFloat { 0% { opacity: 0; transform: translateY(100px) scale(0); } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; transform: translateY(-100vh) scale(1.5); } }
 
 .about-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; align-items: center; margin-top: 40px; }
 .about-image { position: relative; }
-.about-image-frame { width: 100%; aspect-ratio: 4/5; border-radius: 30px; overflow: hidden; border: 1px solid var(--glass-border); position: relative; background: linear-gradient(135deg, rgba(255,107,53,0.08), rgba(255,140,66,0.05)); }
+.about-image-frame { width: 100%; aspect-ratio: 4/5; border-radius: 30px; overflow: hidden; border: 1px solid var(--border); position: relative; background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); }
 .about-image-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
 .about-image-frame:hover img { transform: scale(1.05); }
-.about-image-frame::after { content: ''; position: absolute; inset: -2px; border-radius: 32px; background: linear-gradient(135deg, #ff6b35, #ffb347); z-index: -1; opacity: 0.3; }
+.about-image-frame::after { content: ''; position: absolute; inset: -2px; border-radius: 32px; background: linear-gradient(135deg, var(--primary), var(--accent)); z-index: -1; opacity: 0.3; }
 .about-text h3 { font-size: 2em; font-weight: 700; margin-bottom: 20px; }
 .about-text p { color: var(--text-muted); line-height: 2; font-size: 1.1em; margin-bottom: 25px; }
 
 /* Animated Counters */
 .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; }
-.stat-item { 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid var(--glass-border); 
-  border-radius: 20px; 
-  padding: 25px; 
-  text-align: center; 
-  transition: all 0.3s;
-  box-shadow: var(--glass-shadow);
-}
-.stat-item:hover { 
-  border-color: rgba(255, 107, 53, 0.3); 
-  transform: translateY(-5px); 
-  box-shadow: 0 15px 30px rgba(255, 107, 53, 0.1);
-}
-.stat-number { font-size: 2.2em; font-weight: 800; background: linear-gradient(135deg, #ff6b35, #ffb347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-item { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 25px; text-align: center; transition: all 0.3s; }
+.stat-item:hover { border-color: var(--primary); transform: translateY(-5px); }
+.stat-number { font-size: 2.2em; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .stat-label { color: var(--text-muted); font-size: 0.9em; margin-top: 5px; }
 
 .skills-container { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 25px; }
-.skill-tag { 
-  background: rgba(255, 107, 53, 0.08); 
-  color: #ff8c42; 
-  padding: 10px 24px; 
-  border-radius: 50px; 
-  font-size: 0.95em; 
-  border: 1px solid rgba(255, 107, 53, 0.2); 
-  transition: all 0.3s; 
-  font-weight: 500; 
-  position: relative; 
-  overflow: hidden; 
-}
-.skill-tag:hover { 
-  background: rgba(255, 107, 53, 0.15); 
-  transform: translateY(-3px); 
-  border-color: rgba(255, 107, 53, 0.4); 
-  box-shadow: 0 5px 20px rgba(255, 107, 53, 0.15); 
-}
+.skill-tag { background: rgba(102,126,234,0.08); color: #a78bfa; padding: 10px 24px; border-radius: 50px; font-size: 0.95em; border: 1px solid rgba(102,126,234,0.2); transition: all 0.3s; font-weight: 500; position: relative; overflow: hidden; }
+.skill-tag:hover { background: rgba(102,126,234,0.2); transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 5px 20px rgba(102,126,234,0.2); }
 .skill-tag::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.5s; }
 .skill-tag:hover::before { left: 100%; }
 
 .filter-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 50px; flex-wrap: wrap; }
-.filter-btn { 
-  padding: 10px 22px; 
-  border-radius: 50px; 
-  background: rgba(255,255,255,0.03); 
-  border: 1px solid rgba(255,255,255,0.08); 
-  color: var(--text-muted); 
-  font-weight: 600; 
-  cursor: none; 
-  transition: all 0.3s; 
-  font-size: 0.85em; 
-  backdrop-filter: blur(10px);
-}
-.filter-btn:hover, .filter-btn.active { background: linear-gradient(135deg, #ff6b35, #ff8c42); color: #fff; border-color: transparent; box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3); }
+.filter-btn { padding: 12px 24px; border-radius: 50px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); font-weight: 600; cursor: none; transition: all 0.3s; font-size: 0.9em; }
+.filter-btn:hover, .filter-btn.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border-color: transparent; box-shadow: 0 5px 20px rgba(102,126,234,0.3); }
 
 /* 3D Tilt Cards */
 .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; perspective: 1000px; }
-.project-card { 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border-radius: 24px; 
-  overflow: hidden; 
-  border: 1px solid var(--glass-border); 
-  transition: all 0.5s cubic-bezier(0.4,0,0.2,1); 
-  position: relative; 
-  opacity: 0; 
-  transform: translateY(30px); 
-  transform-style: preserve-3d;
-  box-shadow: var(--glass-shadow);
-}
+.project-card { background: var(--surface); border-radius: 24px; overflow: hidden; border: 1px solid var(--border); transition: all 0.5s cubic-bezier(0.4,0,0.2,1); position: relative; opacity: 0; transform: translateY(30px); transform-style: preserve-3d; }
 .project-card.visible { opacity: 1; transform: translateY(0); }
-.project-card:hover { 
-  transform: translateY(-10px) scale(1.02); 
-  border-color: rgba(255, 107, 53, 0.3); 
-  box-shadow: 0 25px 50px rgba(255, 107, 53, 0.15), 0 0 0 1px rgba(255, 107, 53, 0.1);
-}
+.project-card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--primary); box-shadow: 0 25px 50px rgba(102,126,234,0.15); }
 .project-img-wrap { position: relative; overflow: hidden; aspect-ratio: 4/3; cursor: zoom-in; }
 .project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
 .project-card:hover .project-img { transform: scale(1.08); }
 .project-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); opacity: 0; transition: opacity 0.4s; display: flex; align-items: flex-end; justify-content: center; padding: 25px; }
 .project-card:hover .project-overlay { opacity: 1; }
-.project-overlay-text { color: #fff; font-weight: 600; font-size: 0.95em; background: rgba(255,107,53,0.3); padding: 8px 20px; border-radius: 50px; backdrop-filter: blur(10px); border: 1px solid rgba(255,107,53,0.4); }
+.project-overlay-text { color: #fff; font-weight: 600; font-size: 0.95em; background: rgba(102,126,234,0.3); padding: 8px 20px; border-radius: 50px; backdrop-filter: blur(10px); border: 1px solid rgba(102,126,234,0.4); }
 .project-info { padding: 25px; }
-.project-category { display: inline-block; background: linear-gradient(135deg, #ff6b35, #ff8c42); color: #fff; padding: 5px 16px; border-radius: 50px; font-size: 0.8em; font-weight: 600; margin-bottom: 15px; }
+.project-category { display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; padding: 5px 16px; border-radius: 50px; font-size: 0.8em; font-weight: 600; margin-bottom: 15px; }
 .project-title { font-size: 1.25em; font-weight: 700; margin-bottom: 10px; color: var(--text); }
 .project-desc { color: var(--text-muted); font-size: 0.95em; line-height: 1.7; }
 
 /* Videos Section */
 .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 30px; }
-.video-card { 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border-radius: 24px; 
-  overflow: hidden; 
-  border: 1px solid var(--glass-border); 
-  transition: all 0.4s; 
-  box-shadow: var(--glass-shadow);
-}
-.video-card:hover { 
-  border-color: rgba(255, 107, 53, 0.3); 
-  transform: translateY(-5px); 
-  box-shadow: 0 20px 40px rgba(255, 107, 53, 0.12), 0 0 0 1px rgba(255, 107, 53, 0.08);
-}
+.video-card { background: var(--surface); border-radius: 24px; overflow: hidden; border: 1px solid var(--border); transition: all 0.4s; }
+.video-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(102,126,234,0.1); }
 .video-wrapper { position: relative; aspect-ratio: 16/9; background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .video-wrapper video, .video-wrapper iframe { width: 100%; height: 100%; object-fit: cover; border: none; }
 .video-placeholder { text-align: center; padding: 40px; color: var(--text-muted); }
-.video-placeholder .play-icon { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff6b35, #ff8c42); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.8em; color: #fff; cursor: pointer; transition: transform 0.3s; }
+.video-placeholder .play-icon { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.8em; color: #fff; cursor: pointer; transition: transform 0.3s; }
 .video-placeholder .play-icon:hover { transform: scale(1.1); }
 .video-info { padding: 25px; }
 .video-info h3 { font-size: 1.2em; font-weight: 700; margin-bottom: 8px; }
@@ -415,94 +177,39 @@ nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 .before-after-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; }
 .before-img, .after-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 .after-img { clip-path: inset(0 50% 0 0); }
-.slider-handle { position: absolute; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #ff6b35, #ffb347); cursor: ew-resize; z-index: 10; left: 50%; transform: translateX(-50%); }
-.slider-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #ff6b35, #ff8c42); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2em; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 11; cursor: ew-resize; }
+.slider-handle { position: absolute; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--primary), var(--accent)); cursor: ew-resize; z-index: 10; left: 50%; transform: translateX(-50%); }
+.slider-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2em; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 11; cursor: ew-resize; }
 .before-label, .after-label { position: absolute; bottom: 20px; padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 0.9em; z-index: 5; }
-.before-label { left: 20px; background: rgba(10,10,10,0.7); color: #fff; backdrop-filter: blur(10px); border: 1px solid rgba(255,107,53,0.2); }
-.after-label { right: 20px; background: linear-gradient(135deg, #ff6b35, #ff8c42); color: #fff; }
+.before-label { left: 20px; background: rgba(0,0,0,0.7); color: #fff; }
+.after-label { right: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
 
 /* Testimonials */
 .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
-.testimonial-card { 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid var(--glass-border); 
-  border-radius: 24px; 
-  padding: 30px; 
-  transition: all 0.4s; 
-  position: relative;
-  box-shadow: var(--glass-shadow);
-}
-.testimonial-card:hover { 
-  border-color: rgba(255, 107, 53, 0.3); 
-  transform: translateY(-5px); 
-  box-shadow: 0 15px 30px rgba(255, 107, 53, 0.12), 0 0 0 1px rgba(255, 107, 53, 0.08);
-}
+.testimonial-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 30px; transition: all 0.4s; position: relative; }
+.testimonial-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(102,126,234,0.1); }
 .testimonial-stars { color: #f5a623; font-size: 1.1em; margin-bottom: 15px; }
 .testimonial-text { color: var(--text-muted); line-height: 1.9; font-size: 1em; margin-bottom: 20px; font-style: italic; }
 .testimonial-author { display: flex; align-items: center; gap: 15px; }
-.testimonial-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #ff6b35, #ffb347); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.1em; }
+.testimonial-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.1em; }
 .testimonial-name { font-weight: 700; font-size: 1em; }
 .testimonial-role { color: var(--text-muted); font-size: 0.85em; }
 
 /* Comment Form */
-.comment-form-container { 
-  max-width: 700px; 
-  margin: 50px auto 0; 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid var(--glass-border); 
-  border-radius: 24px; 
-  padding: 40px;
-  box-shadow: var(--glass-shadow);
-}
+.comment-form-container { max-width: 700px; margin: 50px auto 0; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px; }
 .comment-form-container h3 { font-size: 1.5em; font-weight: 700; margin-bottom: 25px; text-align: center; }
 .form-group { margin-bottom: 20px; }
 .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95em; }
-.form-group input, .form-group textarea, .form-group select { 
-  width: 100%; 
-  padding: 14px 18px; 
-  border-radius: 14px; 
-  border: 1px solid var(--glass-border); 
-  background: rgba(255, 255, 255, 0.05); 
-  color: var(--text); 
-  font-family: 'Cairo', sans-serif; 
-  font-size: 1em; 
-  transition: all 0.3s; 
-  backdrop-filter: blur(10px);
-}
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { 
-  outline: none; 
-  border-color: rgba(255, 107, 53, 0.5); 
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1); 
-  background: rgba(255, 255, 255, 0.08);
-}
-[data-theme="light"] .form-group input,
-[data-theme="light"] .form-group textarea,
-[data-theme="light"] .form-group select {
-  background: rgba(255, 255, 255, 0.8);
-}
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 14px 18px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; font-size: 1em; transition: all 0.3s; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
 .form-group textarea { resize: vertical; min-height: 120px; }
 .rating-stars-input { display: flex; gap: 8px; font-size: 1.8em; cursor: pointer; justify-content: center; margin: 15px 0; }
 .rating-stars-input span { color: var(--border); transition: color 0.2s; }
-.rating-stars-input span.active { color: #ff6b35; }
-.submit-btn { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ff6b35, #ff8c42); color: #fff; font-weight: 700; font-size: 1.1em; border: none; cursor: none; transition: all 0.3s; }
-.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,107,53,0.3); }
+.rating-stars-input span.active { color: #f5a623; }
+.submit-btn { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-weight: 700; font-size: 1.1em; border: none; cursor: none; transition: all 0.3s; }
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(102,126,234,0.3); }
 .user-comments { max-width: 700px; margin: 30px auto 0; }
-.user-comment { 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid var(--glass-border); 
-  border-radius: 16px; 
-  padding: 20px; 
-  margin-bottom: 15px; 
-  transition: all 0.3s;
-  box-shadow: var(--glass-shadow);
-}
-.user-comment:hover { border-color: rgba(255, 107, 53, 0.3); }
+.user-comment { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 15px; transition: all 0.3s; }
+.user-comment:hover { border-color: var(--primary); }
 .user-comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .user-comment-name { font-weight: 700; }
 .user-comment-date { color: var(--text-muted); font-size: 0.8em; }
@@ -510,22 +217,8 @@ nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 
 /* QR Codes */
 .qr-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 800px; margin: 50px auto 0; }
-.qr-card { 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid var(--glass-border); 
-  border-radius: 24px; 
-  padding: 35px 25px; 
-  text-align: center; 
-  transition: all 0.4s;
-  box-shadow: var(--glass-shadow);
-}
-.qr-card:hover { 
-  border-color: rgba(255, 107, 53, 0.3); 
-  transform: translateY(-8px); 
-  box-shadow: 0 20px 40px rgba(255, 107, 53, 0.12), 0 0 0 1px rgba(255, 107, 53, 0.08);
-}
+.qr-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 35px 25px; text-align: center; transition: all 0.4s; }
+.qr-card:hover { border-color: var(--primary); transform: translateY(-8px); box-shadow: 0 20px 40px rgba(102,126,234,0.1); }
 .qr-card h4 { font-size: 1.2em; font-weight: 700; margin-bottom: 20px; }
 .qr-wrap { display: flex; justify-content: center; margin-bottom: 15px; }
 .qr-wrap canvas, .qr-wrap img { border-radius: 16px; padding: 10px; background: #fff; }
@@ -533,73 +226,28 @@ nav.scrolled { padding: 15px 40px; background: rgba(10,10,10,0.95); }
 
 .contact-section { background: linear-gradient(180deg, var(--bg) 0%, rgba(102,126,234,0.03) 50%, var(--bg) 100%); text-align: center; }
 .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto; }
-.contact-card { 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid var(--glass-border); 
-  border-radius: 20px; 
-  padding: 35px 25px; 
-  text-decoration: none; 
-  color: var(--text); 
-  transition: all 0.4s; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 15px;
-  box-shadow: var(--glass-shadow);
-}
-.contact-card:hover { 
-  border-color: rgba(255, 107, 53, 0.3); 
-  transform: translateY(-8px) scale(1.02); 
-  box-shadow: 0 20px 40px rgba(255, 107, 53, 0.15), 0 0 0 1px rgba(255, 107, 53, 0.1);
-}
-.contact-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #ff6b35, #ff8c42); display: flex; align-items: center; justify-content: center; font-size: 1.5em; transition: transform 0.3s; }
+.contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 35px 25px; text-decoration: none; color: var(--text); transition: all 0.4s; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.contact-card:hover { border-color: var(--primary); transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(102,126,234,0.15); }
+.contact-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 1.5em; transition: transform 0.3s; }
 .contact-card:hover .contact-icon { transform: scale(1.1) rotate(-5deg); }
 .contact-card h4 { font-size: 1.2em; font-weight: 700; }
 .contact-card p { color: var(--text-muted); font-size: 0.95em; }
 .social-bar { display: flex; justify-content: center; gap: 20px; margin-top: 40px; }
-.social-link { 
-  width: 55px; 
-  height: 55px; 
-  border-radius: 50%; 
-  background: var(--glass-bg); 
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border); 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  color: var(--text-muted); 
-  font-size: 1.4em; 
-  text-decoration: none; 
-  transition: all 0.4s; 
-  position: relative; 
-  overflow: hidden;
-  box-shadow: var(--glass-shadow);
-}
-.social-link:hover { 
-  border-color: rgba(255, 107, 53, 0.4); 
-  color: #fff; 
-  transform: translateY(-5px); 
-  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3); 
-}
-.social-link.instagram:hover { 
-  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
-  border-color: transparent; 
-}
+.social-link { width: 55px; height: 55px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.4em; text-decoration: none; transition: all 0.4s; position: relative; overflow: hidden; }
+.social-link:hover { border-color: var(--primary); color: #fff; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(102,126,234,0.3); }
+.social-link.instagram:hover { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); border-color: transparent; }
 
 footer { text-align: center; padding: 50px 40px; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 50px; }
-.footer-logo { font-size: 1.8em; font-weight: 800; background: linear-gradient(135deg, #ff6b35, #ffb347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 15px; }
+.footer-logo { font-size: 1.8em; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 15px; }
 
 .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10005; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s; backdrop-filter: blur(20px); }
 .lightbox.active { opacity: 1; visibility: visible; }
 .lightbox-img { width: auto; height: auto; max-width: 95vw; max-height: 90vh; object-fit: contain; border-radius: 16px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); transform: scale(var(--img-scale, 0.8)); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
 .lightbox.active .lightbox-img { transform: scale(var(--img-scale, 1)); }
-.lightbox-close { position: absolute; top: 30px; left: 30px; width: 50px; height: 50px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,107,53,0.3); border-radius: 50%; color: #fff; font-size: 1.5em; cursor: none; display: flex; align-items: center; justify-content: center; transition: all 0.3s; backdrop-filter: blur(10px); }
-.lightbox-close:hover { background: rgba(255,107,53,0.2); transform: rotate(90deg); border-color: rgba(255,107,53,0.5); }
-.lightbox-caption { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 1.1em; font-weight: 600; text-align: center; background: rgba(10,10,10,0.7); padding: 10px 30px; border-radius: 50px; backdrop-filter: blur(10px); border: 1px solid rgba(255,107,53,0.2); }
-.magnifier-glass { position: fixed; width: 200px; height: 200px; border-radius: 50%; border: 3px solid #ff6b35; box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 20px 50px rgba(0,0,0,0.6); pointer-events: none; z-index: 10006; background-repeat: no-repeat; background-color: #0a0a0a; transform: translate(-50%, -50%); display: none; }
+.lightbox-close { position: absolute; top: 30px; left: 30px; width: 50px; height: 50px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; font-size: 1.5em; cursor: none; display: flex; align-items: center; justify-content: center; transition: all 0.3s; backdrop-filter: blur(10px); }
+.lightbox-close:hover { background: rgba(255,255,255,0.2); transform: rotate(90deg); }
+.lightbox-caption { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 1.1em; font-weight: 600; text-align: center; background: rgba(0,0,0,0.6); padding: 10px 30px; border-radius: 50px; backdrop-filter: blur(10px); }
+.magnifier-glass { position: fixed; width: 200px; height: 200px; border-radius: 50%; border: 3px solid var(--primary); box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 20px 50px rgba(0,0,0,0.6); pointer-events: none; z-index: 10006; background-repeat: no-repeat; background-color: #0a0a0a; transform: translate(-50%, -50%); display: none; }
 
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4,0,0.2,1); }
@@ -611,668 +259,24 @@ footer { text-align: center; padding: 50px 40px; color: var(--text-muted); borde
 @keyframes glitch-anim { 0% { clip: rect(31px,9999px,94px,0); } 20% { clip: rect(78px,9999px,20px,0); } 40% { clip: rect(12px,9999px,6px,0); } 60% { clip: rect(65px,9999px,89px,0); } 80% { clip: rect(23px,9999px,67px,0); } 100% { clip: rect(91px,9999px,34px,0); } }
 @keyframes glitch-anim2 { 0% { clip: rect(65px,9999px,99px,0); } 20% { clip: rect(12px,9999px,56px,0); } 40% { clip: rect(89px,9999px,23px,0); } 60% { clip: rect(34px,9999px,78px,0); } 80% { clip: rect(56px,9999px,12px,0); } 100% { clip: rect(23px,9999px,91px,0); } }
 
-
-/* ===== Icon Glow Effect ===== */
-.icon { 
-  display: inline-block; 
-  vertical-align: middle; 
-  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
-  transition: filter 0.3s;
-}
-.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
-  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
-}
-.project-card:hover .project-overlay .icon {
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-}
-.nav-links a:hover .icon, .mobile-nav a:hover .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
-}
-.hero-badge .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
-}
-
 @media (max-width: 768px) {
   body { cursor: auto; }
-  .cursor, .cursor-light { display: none !important; }
+  .cursor, .cursor-light { display: none; }
   .btn, .filter-btn, .lightbox-close, .submit-btn { cursor: pointer; }
   .nav-links { display: none; }
-
-  /* ===== Hero Mobile Fixes ===== */
-  .hero { 
-    min-height: auto; 
-    padding: 90px 16px 40px; 
-    background: none;
-  }
-  .hero-content { max-width: 100%; }
-  .hero-avatar { 
-    width: 100px; 
-    height: 100px; 
-    margin-bottom: 16px;
-    border-width: 3px;
-  }
-  .hero-badge { 
-    font-size: 0.75em; 
-    padding: 6px 16px; 
-    margin-bottom: 14px;
-  }
-  .hero h1 { 
-    font-size: 1.6em; 
-    line-height: 1.3; 
-    margin-bottom: 12px;
-    word-break: keep-all;
-  }
-  .hero-subtitle { 
-    font-size: 0.95em; 
-    margin-bottom: 12px;
-    min-height: 1.6em;
-  }
-  .hero-desc { 
-    font-size: 0.85em; 
-    line-height: 1.7; 
-    margin-bottom: 24px;
-    padding: 0 8px;
-  }
-  .hero-buttons { 
-    flex-direction: column; 
-    gap: 12px; 
-    width: 100%;
-    max-width: 280px;
-    margin: 0 auto;
-  }
-  .hero-buttons .btn { 
-    width: 100%; 
-    justify-content: center;
-    padding: 12px 24px;
-    font-size: 0.9em;
-  }
-
-  /* Hide marquee on mobile - takes too much space */
-  .marquee-container { display: none; }
-
-  /* Reduce orbs opacity */
-  
-/* ===== Orange Glow Spots ===== */
-.glow-spot {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.35;
-}
-.glow-spot-1 {
-  width: 350px; height: 350px;
-  background: radial-gradient(circle, rgba(255,107,53,0.4) 0%, transparent 70%);
-  top: 5%; right: 10%;
-  animation: glowFloat 10s ease infinite;
-}
-.glow-spot-2 {
-  width: 250px; height: 250px;
-  background: radial-gradient(circle, rgba(255,140,66,0.3) 0%, transparent 70%);
-  bottom: 20%; left: 5%;
-  animation: glowFloat 12s ease infinite reverse;
-}
-.glow-spot-3 {
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(255,179,71,0.2) 0%, transparent 70%);
-  top: 50%; left: 60%;
-  animation: glowFloat 15s ease infinite;
-}
-@keyframes glowFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(15px, -15px) scale(1.05); }
-  66% { transform: translate(-10px, 10px) scale(0.98); }
-}
-[data-theme="light"] .glow-spot { opacity: 0.15; }
-
-.float-orb { opacity: 0.15; }
-  .orb-1 { width: 200px; height: 200px; }
-  .orb-2 { width: 150px; height: 150px; }
-  .orb-3 { width: 100px; height: 100px; }
-
-  /* ===== Section Mobile ===== */
-  .section { padding: 50px 16px; }
-  .section-title { font-size: 1.8em; }
-  .section-desc { font-size: 0.9em; }
-
-  /* ===== About Mobile ===== */
-  .about-grid { grid-template-columns: 1fr; gap: 30px; }
-  .about-image-frame { border-radius: 20px; max-width: 280px; margin: 0 auto; }
-  .about-text h3 { font-size: 1.5em; }
-  .about-text p { font-size: 0.9em; line-height: 1.8; }
-  .about-stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .stat-item { padding: 15px 10px; border-radius: 14px; }
-  .stat-number { font-size: 1.5em; }
-  .stat-label { font-size: 0.75em; }
-  .skills-container { gap: 8px; }
-  .skill-tag { padding: 8px 16px; font-size: 0.8em; }
-
-  /* ===== Projects Mobile ===== */
-  .projects-grid, .projects-grid.masonry { 
-    grid-template-columns: 1fr !important; 
-    column-count: 1 !important;
-    gap: 20px;
-  }
-  .project-card { border-radius: 18px; }
-  .project-card::before { border-radius: 19px; }
-  .project-info { padding: 18px; }
-  .project-title { font-size: 1.05em; }
-  .project-desc { font-size: 0.85em; }
-  .filter-tabs { gap: 8px; margin-bottom: 30px; }
-  .filter-btn { padding: 8px 16px; font-size: 0.8em; }
-  .new-badge { padding: 4px 10px; font-size: 0.65em; top: 10px; right: 10px; }
-  .share-btn { display: none !important; }
-  .view-counter { font-size: 0.75em; }
-
-  /* ===== Videos Mobile ===== */
-  .videos-grid { grid-template-columns: 1fr; gap: 20px; }
-  .video-card { border-radius: 18px; }
-  .video-info { padding: 18px; }
-  .video-info h3 { font-size: 1em; }
-  .video-info p { font-size: 0.85em; }
-
-  /* ===== Before/After Mobile ===== */
-  .before-after-container { border-radius: 16px; }
-  .before-label, .after-label { font-size: 0.75em; padding: 5px 12px; }
-  .slider-button { width: 40px; height: 40px; font-size: 1em; }
-
-  /* ===== Testimonials Mobile ===== */
-  .testimonials-grid { grid-template-columns: 1fr; gap: 16px; }
-  .testimonial-card { padding: 20px; border-radius: 18px; }
-  .testimonial-text { font-size: 0.85em; line-height: 1.7; }
-  .testimonial-author { gap: 10px; }
-  .testimonial-avatar { width: 40px; height: 40px; font-size: 0.9em; }
-  .testimonial-name { font-size: 0.9em; }
-  .testimonial-role { font-size: 0.75em; }
-  .comment-form-container { padding: 24px 16px; border-radius: 18px; }
-  .comment-form-container h3 { font-size: 1.2em; }
-  .form-group input, .form-group textarea { padding: 12px 14px; font-size: 0.9em; }
-  .submit-btn { padding: 14px; font-size: 1em; }
-  .rating-stars-input { font-size: 1.5em; }
-
-  /* ===== Contact Mobile ===== */
-  .contact-grid { grid-template-columns: 1fr; gap: 12px; }
-  .contact-card { padding: 24px 16px; border-radius: 16px; }
-  .contact-icon { width: 50px; height: 50px; font-size: 1.3em; }
-  .contact-card h4 { font-size: 1em; }
-  .contact-card p { font-size: 0.85em; }
-  .qr-section { grid-template-columns: 1fr; gap: 16px; }
-  .qr-card { padding: 24px 16px; }
-  .social-bar { gap: 12px; margin-top: 24px; }
-  .social-link { width: 45px; height: 45px; }
-
-  /* ===== Nav Mobile ===== */
-  nav { padding: 12px 16px; }
-  .logo { font-size: 1.2em; }
-  .hamburger { gap: 4px; }
-  .hamburger span { width: 22px; height: 2px; }
-
-  /* ===== Footer Mobile ===== */
-  footer { padding: 30px 16px; }
-  .footer-logo { font-size: 1.4em; }
-
-  /* ===== Lightbox Mobile ===== */
+  .hero h1 { font-size: 2.2em; }
+  .hero-avatar { width: 120px; height: 120px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .projects-grid, .videos-grid, .testimonials-grid { grid-template-columns: 1fr; }
+  .about-stats { grid-template-columns: 1fr; }
+  .section { padding: 60px 20px; }
+  nav { padding: 15px 20px; }
   .lightbox-img { max-width: 95vw; max-height: 70vh; }
-  .lightbox-close { top: 15px; left: 15px; width: 40px; height: 40px; }
-  .lightbox-caption { font-size: 0.85em; padding: 8px 20px; bottom: 15px; }
-
-  /* ===== Floating buttons Mobile ===== */
-  .theme-toggle { top: 12px; left: 12px; width: 40px; height: 40px; font-size: 1.1em; }
-  .back-to-top { bottom: 15px; left: 15px; width: 42px; height: 42px; }
-  .focus-toggle { display: none; }
-
-  /* ===== Preloader Mobile ===== */
-  .preloader-text { font-size: 2em; }
-  .preloader-bar { width: 180px; }
+  .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; }
+  .magnifier-glass { display: none !important; }
+  .before-after-container { border-radius: 16px; }
 }
-
-/* ===== Back to Top ===== */
-.back-to-top {
-  position: fixed;
-  bottom: 30px;
-  left: 30px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3em;
-  cursor: none;
-  z-index: 9997;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 5px 20px rgba(102,126,234,0.3);
-  pointer-events: none;
-}
-.back-to-top.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: all;
-}
-.back-to-top:hover {
-  transform: translateY(-5px) scale(1.1);
-  box-shadow: 0 10px 30px rgba(102,126,234,0.5);
-}
-
-/* ===== Mobile Menu ===== */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: none;
-  z-index: 1001;
-  padding: 5px;
-}
-.hamburger span {
-  display: block;
-  width: 25px;
-  height: 2px;
-  background: var(--text);
-  transition: all 0.3s;
-  border-radius: 2px;
-}
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-.mobile-nav {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 80%;
-  max-width: 350px;
-  height: 100vh;
-  background: var(--surface);
-  backdrop-filter: blur(40px);
-  z-index: 999;
-  padding: 100px 30px 30px;
-  transition: right 0.5s cubic-bezier(0.4,0,0.2,1);
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.mobile-nav.active { right: 0; }
-.mobile-nav a {
-  color: var(--text);
-  text-decoration: none;
-  font-size: 1.2em;
-  font-weight: 600;
-  padding: 15px;
-  border-radius: 14px;
-  transition: all 0.3s;
-  position: relative;
-}
-.mobile-nav a:hover, .mobile-nav a.active {
-  background: rgba(102,126,234,0.1);
-  color: var(--primary);
-}
-.mobile-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(5px);
-  z-index: 998;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.4s;
-}
-.mobile-overlay.active { opacity: 1; visibility: visible; }
-
-/* ===== Active Nav Link ===== */
-.nav-links a.active { color: var(--primary); }
-.nav-links a.active::after { width: 100%; }
-
-/* ===== Skeleton Loading ===== */
-.skeleton {
-  background: linear-gradient(90deg, var(--border) 25%, var(--surface) 50%, var(--border) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 12px;
-}
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-.project-img-wrap .skeleton-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  transition: opacity 0.5s;
-}
-.project-img-wrap.loaded .skeleton-overlay { opacity: 0; pointer-events: none; }
-
-/* ===== Enhanced Nav Glassmorphism ===== */
-nav {
-  background: rgba(10,10,10,0.6);
-  backdrop-filter: blur(40px) saturate(1.2);
-  -webkit-backdrop-filter: blur(40px) saturate(1.2);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-[data-theme="light"] nav {
-  background: rgba(255,255,255,0.75);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-nav.scrolled {
-  background: rgba(10,10,10,0.85);
-  backdrop-filter: blur(50px) saturate(1.3);
-}
-[data-theme="light"] nav.scrolled {
-  background: rgba(255,255,255,0.92);
-}
-
-/* ===== Gradient Border Cards ===== */
-.project-card::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 25px;
-  background: linear-gradient(135deg, #ff6b35, #ff8c42, #ffb347, #ff6b35);
-  background-size: 300% 300%;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.5s;
-  animation: gradientMove 3s ease infinite;
-}
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.project-card:hover::before { opacity: 1; }
-
-/* ===== Toast Notification ===== */
-.toast {
-  position: fixed;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--surface);
-  border: 1px solid var(--primary);
-  color: var(--text);
-  padding: 14px 28px;
-  border-radius: 50px;
-  font-weight: 600;
-  z-index: 10010;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 10px 30px rgba(102,126,234,0.2);
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ===== Focus Mode ===== */
-.focus-toggle {
-  position: fixed;
-  top: 150px;
-  left: 20px;
-  z-index: 10003;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: var(--card);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: none;
-  font-size: 1.3em;
-  transition: all 0.3s;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-}
-.focus-toggle:hover { transform: scale(1.1); border-color: var(--primary); }
-.focus-mode .marquee-container,
-.focus-mode 
-/* ===== Orange Glow Spots ===== */
-.glow-spot {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.35;
-}
-.glow-spot-1 {
-  width: 350px; height: 350px;
-  background: radial-gradient(circle, rgba(255,107,53,0.4) 0%, transparent 70%);
-  top: 5%; right: 10%;
-  animation: glowFloat 10s ease infinite;
-}
-.glow-spot-2 {
-  width: 250px; height: 250px;
-  background: radial-gradient(circle, rgba(255,140,66,0.3) 0%, transparent 70%);
-  bottom: 20%; left: 5%;
-  animation: glowFloat 12s ease infinite reverse;
-}
-.glow-spot-3 {
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(255,179,71,0.2) 0%, transparent 70%);
-  top: 50%; left: 60%;
-  animation: glowFloat 15s ease infinite;
-}
-@keyframes glowFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(15px, -15px) scale(1.05); }
-  66% { transform: translate(-10px, 10px) scale(0.98); }
-}
-[data-theme="light"] .glow-spot { opacity: 0.15; }
-
-.float-orb,
-.focus-mode #particleCanvas,
-.focus-mode .space-bg,
-.focus-mode .floating-stars,
-.focus-mode .cursor-light {
-  opacity: 0 !important;
-  pointer-events: none;
-}
-.focus-mode .hero { background: none; }
-
-/* ===== New Badge ===== */
-.new-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: linear-gradient(135deg, #ff4757, #ff6b81);
-  color: #fff;
-  padding: 5px 14px;
-  border-radius: 50px;
-  font-size: 0.75em;
-  font-weight: 700;
-  z-index: 5;
-  box-shadow: 0 4px 15px rgba(255,71,87,0.4);
-  animation: pulseBadge 2s ease infinite;
-}
-@keyframes pulseBadge {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-/* ===== Share Button ===== */
-.share-btn {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: none;
-  z-index: 5;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s;
-  font-size: 0.9em;
-}
-.project-card:hover .share-btn { opacity: 1; transform: scale(1); }
-.share-btn:hover { background: var(--primary); }
-
-/* ===== View Counter ===== */
-.view-counter {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--text-muted);
-  font-size: 0.8em;
-  margin-top: 8px;
-}
-
-/* ===== Masonry Layout ===== */
-.projects-grid.masonry {
-  display: block;
-  column-count: 3;
-  column-gap: 30px;
-}
-.projects-grid.masonry .project-card {
-  break-inside: avoid;
-  margin-bottom: 30px;
-  display: inline-block;
-  width: 100%;
-}
-@media (max-width: 1100px) {
-  .projects-grid.masonry { column-count: 2; }
-}
-
-/* ===== Icon Glow Effect ===== */
-.icon { 
-  display: inline-block; 
-  vertical-align: middle; 
-  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
-  transition: filter 0.3s;
-}
-.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
-  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
-}
-.project-card:hover .project-overlay .icon {
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-}
-.nav-links a:hover .icon, .mobile-nav a:hover .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
-}
-.hero-badge .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
-}
-
-@media (max-width: 768px) {
-  .projects-grid.masonry { column-count: 1; }
-}
-
-/* ===== Parallax Image ===== */
-.about-image-frame { overflow: hidden; }
-.about-image-frame img.parallax {
-  will-change: transform;
-}
-
-/* ===== Particle Burst Canvas ===== */
-#particleBurst {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10000;
-}
-
-/* ===== Image Error Placeholder ===== */
-.img-error {
-  background: linear-gradient(135deg, var(--surface), var(--darker));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 0.9em;
-  gap: 10px;
-}
-.img-error::before {
-  content: '<svg class="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
-  font-size: 2em;
-  opacity: 0.5;
-}
-
-/* ===== Enhanced Cursor ===== */
-.cursor {
-  will-change: transform;
-  transition: width 0.2s, height 0.2s, background 0.2s;
-}
-
-/* ===== Mobile Responsive Updates ===== */
-
-/* ===== Icon Glow Effect ===== */
-.icon { 
-  display: inline-block; 
-  vertical-align: middle; 
-  filter: drop-shadow(0 0 6px rgba(255,107,53,0.5));
-  transition: filter 0.3s;
-}
-.btn:hover .icon, .contact-card:hover .icon, .social-link:hover .icon, .filter-btn:hover .icon {
-  filter: drop-shadow(0 0 12px rgba(255,107,53,0.9));
-}
-.project-card:hover .project-overlay .icon {
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-}
-.nav-links a:hover .icon, .mobile-nav a:hover .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.7));
-}
-.hero-badge .icon {
-  filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));
-}
-
-@media (max-width: 768px) {
-  .hamburger { display: flex; }
-  .nav-links { display: none; }
-  .back-to-top { width: 45px; height: 45px; font-size: 1.1em; bottom: 20px; left: 20px; }
-  .focus-toggle { display: none; }
-  .projects-grid.masonry { column-count: 1; }
-  .share-btn { display: none; }
-}
-@media (min-width: 769px) {
-  .mobile-nav, .mobile-overlay { display: none !important; }
-}
-
 </style>
-
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" as="style">
-<link rel="preload" href="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" as="image">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "يوسف محمد",
-  "jobTitle": "Graphic Designer & AI Content Creator",
-  "description": "مصمم جرافيك وصانع محتوى بالذكاء الاصطناعي - بخبرة 4 سنوات في التصميم الجرافيكي وصناعة المحتوى الرقمي",
-  "url": "https://www.instagram.com/yousefiprahimm/",
-  "image": "Person_wearing_modern_eyeglasses_202606081448 copy.jpg",
-  "sameAs": [
-    "https://www.instagram.com/yousefiprahimm/"
-  ],
-  "knowsAbout": ["Graphic Design", "AI Content Creation", "Video Editing", "Brand Identity", "Social Media Design"],
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Freelance"
-  }
-}
-</script>
-
-<base target="_blank">
 </head>
 <body>
 
@@ -1281,91 +285,35 @@ nav.scrolled {
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <div class="preloader" id="preloader">
-  <div class="preloader-icon">
-    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 0 20px rgba(255,107,53,0.6));">
-      <defs>
-        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#ff6b35"/>
-          <stop offset="50%" style="stop-color:#ff8c42"/>
-          <stop offset="100%" style="stop-color:#ffb347"/>
-        </linearGradient>
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="4" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <circle cx="40" cy="40" r="36" stroke="url(#logoGrad)" stroke-width="3" fill="none" filter="url(#glow)" opacity="0.3"/>
-      <path d="M25 55 L40 25 L55 55" stroke="url(#logoGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
-      <circle cx="40" cy="20" r="5" fill="url(#logoGrad)" filter="url(#glow)"/>
-    </svg>
-  </div>
-  <div class="preloader-sub">Graphic Designer & AI Creator</div>
+  <div class="preloader-text">يوسف محمد</div>
   <div class="preloader-bar"><div class="preloader-bar-inner"></div></div>
 </div>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-light" id="cursorLight"></div>
 
-<button class="theme-toggle" id="themeToggle" title="تبديل الوضع"><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+<button class="theme-toggle" id="themeToggle" title="تبديل الوضع">🌙</button>
 
 <nav id="navbar">
-  <div class="logo">
-    <svg width="32" height="32" viewBox="0 0 80 80" fill="none" style="filter: drop-shadow(0 0 8px rgba(255,107,53,0.6));">
-      <defs>
-        <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#ff6b35"/>
-          <stop offset="100%" style="stop-color:#ffb347"/>
-        </linearGradient>
-        <filter id="logoGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <circle cx="40" cy="40" r="36" stroke="url(#navLogoGrad)" stroke-width="4" fill="none" filter="url(#logoGlow)"/>
-      <path d="M25 55 L40 25 L55 55" stroke="url(#navLogoGrad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#logoGlow)"/>
-      <circle cx="40" cy="20" r="6" fill="url(#navLogoGrad)" filter="url(#logoGlow)"/>
-    </svg>
-  </div>
+  <div class="logo">يوسف محمد</div>
   <ul class="nav-links">
-    <li><a href="#about" data-section="about">نبذة عني</a></li>
-    <li><a href="#works" data-section="works">أعمالي</a></li>
-    <li><a href="#videos" data-section="videos">فيديوهات</a></li>
-    <li><a href="#before-after" data-section="before-after">قبل & بعد</a></li>
-    <li><a href="#testimonials" data-section="testimonials">آراء العملاء</a></li>
-    <li><a href="#contact" data-section="contact">تواصل</a></li>
+    <li><a href="#about">نبذة عني</a></li>
+    <li><a href="#works">أعمالي</a></li>
+    <li><a href="#videos">فيديوهات</a></li>
+    <li><a href="#before-after">قبل & بعد</a></li>
+    <li><a href="#testimonials">آراء العملاء</a></li>
+    <li><a href="#contact">تواصل</a></li>
   </ul>
-  <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
 </nav>
-
-<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
-<div class="mobile-nav" id="mobileNav">
-  <a href="#about" onclick="toggleMobileMenu()">نبذة عني</a>
-  <a href="#works" onclick="toggleMobileMenu()">أعمالي</a>
-  <a href="#videos" onclick="toggleMobileMenu()">فيديوهات</a>
-  <a href="#before-after" onclick="toggleMobileMenu()">قبل & بعد</a>
-  <a href="#testimonials" onclick="toggleMobileMenu()">آراء العملاء</a>
-  <a href="#contact" onclick="toggleMobileMenu()">تواصل</a>
-</div>
 
 <section class="hero">
   <canvas id="particleCanvas"></canvas>
-  <div class="glow-spot glow-spot-1"></div>
-  <div class="glow-spot glow-spot-2"></div>
-  <div class="glow-spot glow-spot-3"></div>
   <div class="float-orb orb-1"></div>
   <div class="float-orb orb-2"></div>
   <div class="float-orb orb-3"></div>
   <div class="hero-content">
-    <div class="hero-avatar-wrap">
-      <div class="hero-avatar-glow"></div>
-      <img src="Person_wearing_modern_eyeglasses_202606081448%20copy.jpg" alt="" class="hero-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="avatar-fallback" style="display:none">YM</div>
-    </div>
-    <div class="hero-badge"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg> Graphic Designer & AI Content Creator</div>
+    <img src="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" alt="يوسف محمد" class="hero-avatar">
+    <div class="hero-badge">✦ Graphic Designer & AI Content Creator</div>
     <h1>أحوّل الأفكار إلى <span class="gradient glitch" data-text="تجارب بصرية">تجارب بصرية</span><br>لا تُنسى</h1>
     <p class="hero-subtitle" id="typingText"></p>
     <p class="hero-desc">
@@ -1373,13 +321,13 @@ nav.scrolled {
       من هويات الشركات إلى التصاميم الرياضية والإعلانات التجارية والأفلام — كل بكسل له قصة.
     </p>
     <div class="hero-buttons">
-      <a href="#works" class="btn btn-primary magnetic"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.01 17.461 2 12 2z"/></svg> استكشف أعمالي</a>
-      <a href="#contact" class="btn btn-outline magnetic"><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> تواصل معي</a>
+      <a href="#works" class="btn btn-primary magnetic">🎨 استكشف أعمالي</a>
+      <a href="#contact" class="btn btn-outline magnetic">📩 تواصل معي</a>
     </div>
     <div class="marquee-container">
       <div class="marquee-track" id="marqueeTrack">
-        <div class="marquee-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.01 17.461 2 12 2z"/></svg> تصميم جرافيك احترافي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg> محتوى بالذكاء الاصطناعي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> مونتاج وفيديو <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/><circle cx="12" cy="12" r="4"/></svg> تصاميم رياضية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> أغلفة كتب <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg> بوسترات أفلام <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> هويات بصرية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> سوشيال ميديا <span>•</span></div>
-        <div class="marquee-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.01 17.461 2 12 2z"/></svg> تصميم جرافيك احترافي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg> محتوى بالذكاء الاصطناعي <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> مونتاج وفيديو <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/><circle cx="12" cy="12" r="4"/></svg> تصاميم رياضية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> أغلفة كتب <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg> بوسترات أفلام <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> هويات بصرية <span>•</span> <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> سوشيال ميديا <span>•</span></div>
+        <div class="marquee-text">🎨 تصميم جرافيك احترافي <span>•</span> 🤖 محتوى بالذكاء الاصطناعي <span>•</span> 🎬 مونتاج وفيديو <span>•</span> ⚽ تصاميم رياضية <span>•</span> 📚 أغلفة كتب <span>•</span> 🎭 بوسترات أفلام <span>•</span> 🏷️ هويات بصرية <span>•</span> 📱 سوشيال ميديا <span>•</span></div>
+        <div class="marquee-text">🎨 تصميم جرافيك احترافي <span>•</span> 🤖 محتوى بالذكاء الاصطناعي <span>•</span> 🎬 مونتاج وفيديو <span>•</span> ⚽ تصاميم رياضية <span>•</span> 📚 أغلفة كتب <span>•</span> 🎭 بوسترات أفلام <span>•</span> 🏷️ هويات بصرية <span>•</span> 📱 سوشيال ميديا <span>•</span></div>
       </div>
     </div>
   </div>
@@ -1395,7 +343,7 @@ nav.scrolled {
   <div class="about-grid">
     <div class="about-image reveal">
       <div class="about-image-frame">
-        <img src="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" alt="يوسف محمد" class="parallax" id="aboutParallaxImg">
+        <img src="Person_wearing_modern_eyeglasses_202606081448 copy.jpg" alt="يوسف محمد">
       </div>
     </div>
     <div class="about-text reveal">
@@ -1448,501 +396,369 @@ nav.scrolled {
     <button class="filter-btn" onclick="filterProjects('movie', this)">بوسترات أفلام</button>
   </div>
 
-  <div class="projects-grid masonry" id="projectsGrid">
+  <div class="projects-grid" id="projectsGrid">
 
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'تهنئة عيد الأضحى — MMI')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="fber-Eid.png" alt="تهنئة عيد الأضحى — MMI" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="fber-Eid.png" alt="تهنئة عيد الأضحى — MMI" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">تهنئة عيد الأضحى — MMI</h3>
         <p class="project-desc">تصميم تهنئة عيد الأضحى المبارك لشركة MMI للإنشاءات والتصميم، بأسلوب يجمع بين الأصالة الإسلامية والحداثة البصرية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'تهنئة العيد — المعادي للمقاولات')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="المعادي-للمقولات.png" alt="تهنئة العيد — المعادي للمقاولات" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="المعادي-للمقولات.png" alt="تهنئة العيد — المعادي للمقاولات" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">تهنئة العيد — المعادي للمقاولات</h3>
         <p class="project-desc">تصميم احترافي لتهنئة العيد لشركة المعادي للمقاولات، مستخدماً عناصر بصرية ترمز للوحدة والتجمع الروحاني.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 980</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'إعلان عيد الأضحى الإبداعي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="عيدد-الاضحي-1.png" alt="إعلان عيد الأضحى الإبداعي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="عيدد-الاضحي-1.png" alt="إعلان عيد الأضحى الإبداعي" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان عيد الأضحى الإبداعي</h3>
         <p class="project-desc">إعلان سينمائي لعيد الأضحى بأسلوب درامي مبتكر، يجسد فكرة الذبيحة بشكل فني جذاب ومؤثر.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'إعلان مكرونة الملكة')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="الملكة-1.png" alt="إعلان مكرونة الملكة" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="الملكة-1.png" alt="إعلان مكرونة الملكة" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان مكرونة الملكة</h3>
         <p class="project-desc">تصميم إعلاني عصري لمكرونة الملكة يركز على جودة المنتج ونقاء المكونات بألوان منعشة وجذابة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'إعلان كرانشي الحار')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="كرانشي.png" alt="إعلان كرانشي الحار" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="كرانشي.png" alt="إعلان كرانشي الحار" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">إعلان كرانشي الحار</h3>
         <p class="project-desc">تصميم ديناميكي لمنتج كرانشي Flamin Hot يستخدم عناصر النار والحركة لنقل إحساس التشويق والقوة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="social">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'الحكمدار — أحمد مكي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="mou.png" alt="الحكمدار — أحمد مكي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="mou.png" alt="الحكمدار — أحمد مكي" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Social Media</span>
         <h3 class="project-title">الحكمدار — أحمد مكي</h3>
         <p class="project-desc">تصميم هوية بصرية كاملة لشيف أحمد مكي بما في ذلك الكارت الشخصي والسوشيال ميديا بأسلوب كلاسيكي أنيق.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 850</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'حملة Big Chips')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="BIG-2.png" alt="حملة Big Chips" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="BIG-2.png" alt="حملة Big Chips" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">حملة Big Chips</h3>
         <p class="project-desc">حملة إعلانية لمنتج Big Chips بفكرة مبتكرة تجسد وصول المنتج لكل مكان حول العالم بأسلوب مغامر وجريء.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'إعلان Bioderma الطبيعي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="fx.png" alt="إعلان Bioderma الطبيعي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="fx.png" alt="إعلان Bioderma الطبيعي" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">إعلان Bioderma الطبيعي</h3>
         <p class="project-desc">تصميم إعلاني لمنتج Bioderma بأسلوب طبيعي مذهل يجمع بين الواقعية والخيال البصري في بيئة غابية ساحرة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="product">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'إعلان Kangaroo Bags')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="xz.png" alt="إعلان Kangaroo Bags" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="xz.png" alt="إعلان Kangaroo Bags" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Product Ad</span>
         <h3 class="project-title">إعلان Kangaroo Bags</h3>
         <p class="project-desc">تصميم إعلاني لحقائب Kangaroo Bags يبرز جودة المنتج والفخامة بإضاءة درامية وتفاصيل احترافية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'حسام حسن — Next Mission')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="hosam-hassan.png" alt="حسام حسن — Next Mission" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="hosam-hassan.png" alt="حسام حسن — Next Mission" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">حسام حسن — Next Mission</h3>
         <p class="project-desc">تصميم رياضي لمدرب منتخب مصر حسام حسن بأسلوب درامي يعبر عن التحدي والمهمة القادمة في أمم أفريقيا.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 4.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'ليفربول vs ريال مدريد')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="liverpool-x-madrid.png" alt="ليفربول vs ريال مدريد" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="liverpool-x-madrid.png" alt="ليفربول vs ريال مدريد" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">ليفربول vs ريال مدريد</h3>
         <p class="project-desc">تصميم مباراة ليفربول وريال مدريد بدوري أبطال أوروبا بأسلوب سينمائي يعكس حماس المواجهة الكبرى.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.9K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'المغرب vs زامبيا')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="morocco-X-zambia.png" alt="المغرب vs زامبيا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="morocco-X-zambia.png" alt="المغرب vs زامبيا" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">المغرب vs زامبيا</h3>
         <p class="project-desc">تصميم Match Day لمنتخب المغرب ضد زامبيا بكأس أمم أفريقيا بأسلوب بطولي يبرز نجوم الفريق.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.7K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs الزمالك — السوبر')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="nbe-alahly-X-alzmalek.png" alt="الأهلي vs الزمالك — السوبر" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="nbe-alahly-X-alzmalek.png" alt="الأهلي vs الزمالك — السوبر" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">الأهلي vs الزمالك — السوبر</h3>
         <p class="project-desc">تصميم كلاسيكو الكرة المصرية بين الأهلي والزمالك على كأس السوبر بتفاصيل درامية وألوان نارية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'الأهلي vs سيراميكا كليوباترا')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="الأهلي-x-سيراميكا.png" alt="الأهلي vs سيراميكا كليوباترا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="الأهلي-x-سيراميكا.png" alt="الأهلي vs سيراميكا كليوباترا" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">الأهلي vs سيراميكا كليوباترا</h3>
         <p class="project-desc">تصميم مباراة الأهلي وسيراميكا كليوباترا بأسلوب ديناميكي يبرز حماس المنافسة والروح الرياضية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.4K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'ساديو ماني — نهائي الأمم')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="ساديو-ماني-نهائي-الامم.png" alt="ساديو ماني — نهائي الأمم" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="ساديو-ماني-نهائي-الامم.png" alt="ساديو ماني — نهائي الأمم" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">ساديو ماني — نهائي الأمم</h3>
         <p class="project-desc">تصميم احتفالي لساديو ماني في نهائي أمم أفريقيا بأسلوب مسرحي يعكس الفخر والإنجاز البطولي.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.1K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'مصر vs زيمبابوي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="مصر-X-زيمبابوي.png" alt="مصر vs زيمبابوي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="مصر-X-زيمبابوي.png" alt="مصر vs زيمبابوي" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">مصر vs زيمبابوي</h3>
         <p class="project-desc">تصميم Match Day لمنتخب مصر ضد زيمبابوي بألوان وطنية وروح بطولية تعكس عظمة الكرة المصرية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.6K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'يوم المباراة — مصر vs إيران')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="منتخب-مصر.png" alt="يوم المباراة — مصر vs إيران" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="منتخب-مصر.png" alt="يوم المباراة — مصر vs إيران" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">يوم المباراة — مصر vs إيران</h3>
         <p class="project-desc">تصميم يوم المباراة لمنتخب مصر ضد إيران بأسلوب يجمع بين الهوية المصرية والحماس الرياضي العارم.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.9K</div>
       </div>
     </div>
     <div class="project-card" data-category="sports">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'منتخب مصر في أمم أفريقيا')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="منتخب-مصر-امم-افريقي.png" alt="منتخب مصر في أمم أفريقيا" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="منتخب-مصر-امم-افريقي.png" alt="منتخب مصر في أمم أفريقيا" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Sports Design</span>
         <h3 class="project-title">منتخب مصر في أمم أفريقيا</h3>
         <p class="project-desc">تصميم بطولي لمنتخب مصر في أمم أفريقيا يجسد روح الفريق الواحد والطموح في التتويج باللقب القاري.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'Megrosty Smile')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="448468812_122152679426141956_2341648530807116964_n.jpg" alt="Megrosty Smile" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="448468812_122152679426141956_2341648530807116964_n.jpg" alt="Megrosty Smile" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Megrosty Smile</h3>
         <p class="project-desc">هوية بصرية لمطعم Megrosty Smile بتصميم عصري يجمع بين الطابع الغذائي والشعار المميز بألوان حيوية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'Emasson Clothing')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="448507052_122152679666141956_959435827464419903_n.jpg" alt="Emasson Clothing" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="448507052_122152679666141956_959435827464419903_n.jpg" alt="Emasson Clothing" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Emasson Clothing</h3>
         <p class="project-desc">شعار minimal أنيق لعلامة تجارية ملابس يعكس الأناقة والبساطة في آن واحد بأسلوب تيبوجرافي متقن.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.4K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'Ezoc Logistic')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="448524183_122152555394141956_9212771902099932621_n.jpg" alt="Ezoc Logistic" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="448524183_122152555394141956_9212771902099932621_n.jpg" alt="Ezoc Logistic" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Ezoc Logistic</h3>
         <p class="project-desc">هوية بصرية لشركة لوجستيات تجسد السرعة والكفاءة بأيقونة شاحنة ديناميكية وألوان حيوية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.7K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'Mekawy Trade')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="fd.png" alt="Mekawy Trade" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="fd.png" alt="Mekawy Trade" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">Mekawy Trade</h3>
         <p class="project-desc">شعار تجاري لشركة Mekawy Trade يجمع بين العناصر المالية والتجارية بتصميم عصري ومتوازن.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — 3D')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="Leonardo_Phoenix_A_luxurious_highend_logo_design_for_M_A_C_COS_3.jpg" alt="M.A.C Cosmetics — 3D" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="Leonardo_Phoenix_A_luxurious_highend_logo_design_for_M_A_C_COS_3.jpg" alt="M.A.C Cosmetics — 3D" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — 3D</h3>
         <p class="project-desc">تصميم لوجو ثلاثي الأبعاد فاخر لعلامة مستحضرات تجميل بأسلوب احترافي وعصري يعكس الفخامة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Elegant')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_0.jpg" alt="M.A.C Cosmetics — Elegant" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_0.jpg" alt="M.A.C Cosmetics — Elegant" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — Elegant</h3>
         <p class="project-desc">تصميم لوجو أنيق وناعم لعلامة تجميل بأسلوب يعكس الفخامة والرقي بخطوط رشيقة وذهبي وردي.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="logo">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'M.A.C Cosmetics — Woman')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_3.jpg" alt="M.A.C Cosmetics — Woman" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="Leonardo_Phoenix_A_stylized_logo_for_M_A_COSMETICS_featuring_a_3.jpg" alt="M.A.C Cosmetics — Woman" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Logo Design</span>
         <h3 class="project-title">M.A.C Cosmetics — Woman</h3>
         <p class="project-desc">تصميم لوجو يجسد جمال المرأة بأسلوب فني مبتكر لعلامة مستحضرات تجميل بظلال وردية ناعمة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'حياة حافظ إبراهيم')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="ORJA091.png" alt="حياة حافظ إبراهيم" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="ORJA091.png" alt="حياة حافظ إبراهيم" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">حياة حافظ إبراهيم</h3>
         <p class="project-desc">تصميم غلاف كتاب أدبي بأسلوب كلاسيكي يجمع بين التراث والحداثة مع عناصر بصرية ترمز للشعر والأدب المصري.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.5K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="Untitled-1.png" alt="رفقاء الليل" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="Untitled-1.png" alt="رفقاء الليل" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">رفقاء الليل</h3>
         <p class="project-desc">غلاف رواية رعب وغموض بأسلوب سينمائي مظلم يبني توتراً بصرياً يجذب القارئ من أول نظرة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.3K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'رفقاء الليل — تصميم داخلي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="Untitled-11.png" alt="رفقاء الليل — تصميم داخلي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="Untitled-11.png" alt="رفقاء الليل — تصميم داخلي" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">رفقاء الليل — تصميم داخلي</h3>
         <p class="project-desc">تصميم صفحات داخلية للرواية بأسلوب متناسق يحافظ على هوية العمل ويوفر تجربة قراءة مريحة وجذابة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 3.0K</div>
       </div>
     </div>
     <div class="project-card" data-category="book">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, 'الشموع السوداء')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="غلاف الشموع السوداء.jpg" alt="الشموع السوداء" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="غلاف الشموع السوداء.jpg" alt="الشموع السوداء" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Book Cover</span>
         <h3 class="project-title">الشموع السوداء</h3>
         <p class="project-desc">غلاف رواية رعب نفسي بأسلوب درامي مظلم يجسد الصراع بين الحياة والموت في إطار تشويقي مثير.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.8K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        
-        <button class="share-btn" onclick="shareProject(event, '6 أيام')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="بوستر-6-أيام.jpg" alt="6 أيام" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="بوستر-6-أيام.jpg" alt="6 أيام" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">6 أيام</h3>
         <p class="project-desc">بوستر فيلم درامي رومانسي بأسلوب سينمائي يجمع بين العواطف والتشويق بإضاءة درامية مذهلة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.6K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        <div class="new-badge">جديد</div>
-        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الرئيسي')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="بوستر-سفاح-التجمع.png" alt="سفاح التجمع — البوستر الرئيسي" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="بوستر-سفاح-التجمع.png" alt="سفاح التجمع — البوستر الرئيسي" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البوستر الرئيسي</h3>
         <p class="project-desc">بوستر فيلم سفاح التجمع بأسلوب جريء يعكس طابع الإثارة والغموض مع تأثيرات زجاج مكسور دموية.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 1.2K</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        <div class="new-badge">جديد</div>
-        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البوستر الثاني')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="بوستر-سفاح-التجمع-2.png-2000-2500.png" alt="سفاح التجمع — البوستر الثاني" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="بوستر-سفاح-التجمع-2.png-2000-2500.png" alt="سفاح التجمع — البوستر الثاني" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البوستر الثاني</h3>
         <p class="project-desc">بوستر بديل لفيلم سفاح التجمع يركز على الجانب النفسي للشخصية بإضاءة حمراء درامية وتأثيرات مرآة.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 980</div>
       </div>
     </div>
     <div class="project-card" data-category="movie">
       <div class="project-img-wrap" onclick="openLightbox(this)">
-        <div class="skeleton-overlay skeleton"></div>
-        <div class="new-badge">جديد</div>
-        <button class="share-btn" onclick="shareProject(event, 'سفاح التجمع — البانر العريض')" title="مشاركة"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <img class="project-img" src="سفاح-التجمع.png" alt="سفاح التجمع — البانر العريض" loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="handleImageError(this)">
-        <div class="project-overlay"><span class="project-overlay-text"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> اضغط للتكبير</span></div>
+        <img class="project-img" src="سفاح-التجمع.png" alt="سفاح التجمع — البانر العريض" loading="lazy">
+        <div class="project-overlay"><span class="project-overlay-text">🔍 اضغط للتكبير</span></div>
       </div>
       <div class="project-info">
         <span class="project-category">Movie Poster</span>
         <h3 class="project-title">سفاح التجمع — البانر العريض</h3>
         <p class="project-desc">تصميم بانر عريض للفيلم يجمع بين كل الشخصيات الرئيسية في إطار واحد مثير بتأثيرات زجاج مكسور.</p>
-        <div class="view-counter"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 2.5K</div>
       </div>
     </div>
   </div>
@@ -1952,17 +768,19 @@ nav.scrolled {
 <!-- Videos Section -->
 <section class="section" id="videos" style="max-width: 1400px;">
   <div class="section-header reveal">
-    <div class="section-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> فيديوهات</div>
+    <div class="section-label">🎬 فيديوهات</div>
     <h2 class="section-title">أعمال الفيديو والمونتاج</h2>
     <p class="section-desc">مجموعة من أعمال المونتاج والموشن جرافيك والفيديوهات الإعلانية بتنفيذ AI</p>
   </div>
   <div class="videos-grid reveal">
     <div class="video-card">
-      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1f0Q6j9CXS0jLLNC9oVekSegR8I3489Bv/preview">
-        <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-          <p>اضغط للتشغيل</p>
-        </div>
+      <div class="video-wrapper">
+        <iframe 
+          src="https://drive.google.com/file/d/1f0Q6j9CXS0jLLNC9oVekSegR8I3489Bv/preview" 
+          allow="autoplay; fullscreen" 
+          allowfullscreen
+          loading="lazy">
+        </iframe>
       </div>
       <div class="video-info">
         <h3>فيديو كليب — لعله خير</h3>
@@ -1970,11 +788,13 @@ nav.scrolled {
       </div>
     </div>
     <div class="video-card">
-      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/10oT1N-vnLDQ8q8Fm6gU1FLkEBdhZoczh/preview">
-        <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-          <p>اضغط للتشغيل</p>
-        </div>
+      <div class="video-wrapper">
+        <iframe 
+          src="https://drive.google.com/file/d/10oT1N-vnLDQ8q8Fm6gU1FLkEBdhZoczh/preview" 
+          allow="autoplay; fullscreen" 
+          allowfullscreen
+          loading="lazy">
+        </iframe>
       </div>
       <div class="video-info">
         <h3>فيديو كليب — طول الوقت</h3>
@@ -1982,11 +802,13 @@ nav.scrolled {
       </div>
     </div>
     <div class="video-card">
-      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1JLT3xWDRemP0APCoonZzGIOELrkTrv03/preview">
-        <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-          <p>اضغط للتشغيل</p>
-        </div>
+      <div class="video-wrapper">
+        <iframe 
+          src="https://drive.google.com/file/d/1JLT3xWDRemP0APCoonZzGIOELrkTrv03/preview" 
+          allow="autoplay; fullscreen" 
+          allowfullscreen
+          loading="lazy">
+        </iframe>
       </div>
       <div class="video-info">
         <h3>إعلان قنواتي</h3>
@@ -1994,11 +816,13 @@ nav.scrolled {
       </div>
     </div>
     <div class="video-card">
-      <div class="video-wrapper video-lazy" data-src="https://drive.google.com/file/d/1Za3NnQ8zdg97p6S-URs8gHJFxAHxTC8A/preview">
-        <div class="video-placeholder" onclick="loadVideo(this)">
-          <div class="play-icon"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-          <p>اضغط للتشغيل</p>
-        </div>
+      <div class="video-wrapper">
+        <iframe 
+          src="https://drive.google.com/file/d/1Za3NnQ8zdg97p6S-URs8gHJFxAHxTC8A/preview" 
+          allow="autoplay; fullscreen" 
+          allowfullscreen
+          loading="lazy">
+        </iframe>
       </div>
       <div class="video-info">
         <h3>إعلان عطر فرنسي</h3>
@@ -2012,7 +836,7 @@ nav.scrolled {
 <!-- Before/After Section -->
 <section class="section" id="before-after">
   <div class="section-header reveal">
-    <div class="section-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> قبل & بعد</div>
+    <div class="section-label">⚡ قبل & بعد</div>
     <h2 class="section-title">تحولات التصميم بالذكاء الاصطناعي</h2>
     <p class="section-desc">اسحب الشريط لمشاهدة التحول من الصورة الأصلية للتصميم النهائي بتقنيات AI</p>
   </div>
@@ -2022,13 +846,13 @@ nav.scrolled {
         <img class="before-img" src="فيجيوال2.png" alt="الصورة الأصلية — قبل">
         <img class="after-img" src="فيجيوال.png" alt="التصميم النهائي — بعد" id="afterImg">
         <div class="slider-handle" id="sliderHandle"></div>
-        <div class="slider-button" id="sliderButton"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/><polyline points="12 19 5 12 12 5" transform="rotate(180 12 12)"/></svg></div>
-        <div class="before-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> قبل — النهار</div>
-        <div class="after-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> بعد — الليل</div>
+        <div class="slider-button" id="sliderButton">⇄</div>
+        <div class="before-label">☀️ قبل — النهار</div>
+        <div class="after-label">🌙 بعد — الليل</div>
       </div>
     </div>
     <p style="text-align: center; color: var(--text-muted); margin-top: 20px; font-size: 0.95em;">
-      <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="6"/><line x1="12" y1="7" x2="12" y2="11"/></svg> اسحب الزر الأوسط يميناً ويساراً لمشاهدة التحول من النهار لليل
+      🖱️ اسحب الزر الأوسط يميناً ويساراً لمشاهدة التحول من النهار لليل
     </p>
   </div>
 </section>
@@ -2036,13 +860,13 @@ nav.scrolled {
 <!-- Testimonials Section -->
 <section class="section" id="testimonials" style="max-width: 1400px;">
   <div class="section-header reveal">
-    <div class="section-label"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> آراء العملاء</div>
+    <div class="section-label">💬 آراء العملاء</div>
     <h2 class="section-title">ماذا يقول عملائي</h2>
     <p class="section-desc">بعض التقييمات من عملائي الذين وثقوا بي في مشاريعهم</p>
   </div>
   <div class="testimonials-grid reveal" id="testimonialsGrid">
     <div class="testimonial-card">
-      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"يوسف مصمم مبدع بشكل لا يُصدق. حوّل فكرتي البسيطة إلى هوية بصرية كاملة تفوق كل توقعاتي. التزامه بالمواعيد واهتمامه بالتفاصيل الصغيرة يجعله الأفضل في مجاله."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">أ</div>
@@ -2053,7 +877,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"التصاميم الرياضية اللي عملها يوسف لصفحتنا غيّرت شكل المحتوى بالكامل. التفاعل زاد 300% والجمهور بقى يستنى البوسترات بفارغ الصبر. شغل عالمي بمعنى الكلمة."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">م</div>
@@ -2064,7 +888,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"بوستر فيلم "سفاح التجمع" كان تحفة فنية. يوسف فهم الروح الدرامية للعمل من أول جلسة وقدم تصميم يخطف الأنفاس. كل المنتجين سألوني عن المصمم بعد العرض."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">س</div>
@@ -2075,7 +899,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"غلاف رواية 'رفقاء الليل' كان نقلة نوعية في مبيعات الكتاب. التصميم المظلم والسينمائي جذب جمهور جديد تماماً. يوسف مش بس مصمم، ده فنان بجد."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">ع</div>
@@ -2086,7 +910,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"حملة الإعلانات اللي عملها يوسف لشركتنا رفعت المبيعات 40% في أول شهر. الفيديوهات والتصاميم كلها كانت احترافية ومؤثرة. أنصح أي حد يشتغل معاه."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">ل</div>
@@ -2097,7 +921,7 @@ nav.scrolled {
       </div>
     </div>
     <div class="testimonial-card">
-      <div class="testimonial-stars"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"اللوجو اللي صممه يوسف لعلامة الملابس بتاعتنا بقى هوية فعلية للبراند. البساطة والأناقة في التصميم خلّت الناس تفتكرنا من أول نظرة. شغل نظيف جداً."</p>
       <div class="testimonial-author">
         <div class="testimonial-avatar">ك</div>
@@ -2111,7 +935,7 @@ nav.scrolled {
 
   <!-- Comment Form -->
   <div class="comment-form-container reveal" id="commentFormContainer">
-    <h3><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> أضف تقييمك</h3>
+    <h3>📝 أضف تقييمك</h3>
     <form id="commentForm">
       <div class="form-group">
         <label>الاسم</label>
@@ -2124,11 +948,11 @@ nav.scrolled {
       <div class="form-group">
         <label>التقييم</label>
         <div class="rating-stars-input" id="ratingStars">
-          <span data-value="1"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-          <span data-value="2"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-          <span data-value="3"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-          <span data-value="4"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
-          <span data-value="5"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span data-value="1">★</span>
+          <span data-value="2">★</span>
+          <span data-value="3">★</span>
+          <span data-value="4">★</span>
+          <span data-value="5">★</span>
         </div>
         <input type="hidden" id="commentRating" value="5">
       </div>
@@ -2136,7 +960,7 @@ nav.scrolled {
         <label>التعليق</label>
         <textarea id="commentText" placeholder="اكتب رأيك في التعامل معي..." required></textarea>
       </div>
-      <button type="submit" class="submit-btn">إرسال التقييم <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+      <button type="submit" class="submit-btn">إرسال التقييم ⭐</button>
     </form>
   </div>
 
@@ -2154,12 +978,12 @@ nav.scrolled {
 
   <div class="qr-section reveal">
     <div class="qr-card">
-      <h4><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> واتساب</h4>
+      <h4>📱 واتساب</h4>
       <div class="qr-wrap" id="qrWhatsapp"></div>
       <p>امسح الكود للتواصل مباشرة على واتساب</p>
     </div>
     <div class="qr-card">
-      <h4><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> إنستجرام</h4>
+      <h4>📷 إنستجرام</h4>
       <div class="qr-wrap" id="qrInstagram"></div>
       <p>امسح الكود لمتابعة أحدث أعمالي</p>
     </div>
@@ -2167,17 +991,17 @@ nav.scrolled {
 
   <div class="contact-grid reveal">
     <a href="tel:+201119248965" class="contact-card">
-      <div class="contact-icon"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      <div class="contact-icon">📱</div>
       <h4>اتصل بي</h4>
       <p>+20 111 924 8965</p>
     </a>
     <a href="https://wa.me/201119248965" class="contact-card" target="_blank">
-      <div class="contact-icon"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="contact-icon">💬</div>
       <h4>واتساب</h4>
       <p>+20 111 924 8965</p>
     </a>
     <a href="mailto:yoousafpoping@gmail.com" class="contact-card">
-      <div class="contact-icon"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div class="contact-icon">📧</div>
       <h4>البريد الإلكتروني</h4>
       <p>yoousafpoping@gmail.com</p>
     </a>
@@ -2196,34 +1020,16 @@ nav.scrolled {
 </section>
 
 <footer>
-  <div class="footer-logo">
-    <svg width="40" height="40" viewBox="0 0 80 80" fill="none" style="filter: drop-shadow(0 0 10px rgba(255,107,53,0.5));">
-      <defs>
-        <linearGradient id="footLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#ff6b35"/>
-          <stop offset="100%" style="stop-color:#ffb347"/>
-        </linearGradient>
-      </defs>
-      <circle cx="40" cy="40" r="36" stroke="url(#footLogoGrad)" stroke-width="3" fill="none"/>
-      <path d="M25 55 L40 25 L55 55" stroke="url(#footLogoGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="40" cy="20" r="5" fill="url(#footLogoGrad)"/>
-    </svg>
-  </div>
+  <div class="footer-logo">يوسف محمد</div>
   <p>© 2026 جميع الحقوق محفوظة | تصميم وتطوير يوسف محمد</p>
   <p style="margin-top: 10px; font-size: 0.85em;">
-    <a href="https://www.instagram.com/yousefiprahimm?igsh=MXFnNWhzOTJleHptMw%3D%3D&utm_source=qr" target="_blank" style="color: #ff6b35; text-decoration: none;"><svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> تابعني على إنستجرام</a>
+    <a href="https://www.instagram.com/yousefiprahimm?igsh=MXFnNWhzOTJleHptMw%3D%3D&utm_source=qr" target="_blank" style="color: #667eea; text-decoration: none;">📷 تابعني على إنستجرام</a>
   </p>
 </footer>
 
 <!-- Lightbox -->
-
-<button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="العودة للأعلى"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
-<button class="focus-toggle" id="focusToggle" onclick="toggleFocusMode()" title="وضع التركيز"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></button>
-<div class="toast" id="toast"></div>
-<canvas id="particleBurst"></canvas>
-
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <div class="lightbox-close" onclick="closeLightboxBtn(event)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+  <div class="lightbox-close" onclick="closeLightboxBtn(event)">✕</div>
   <img class="lightbox-img" id="lightboxImg" src="" alt="">
   <div class="magnifier-glass" id="magnifierGlass"></div>
   <div class="lightbox-caption" id="lightboxCaption"></div>
@@ -2291,7 +1097,7 @@ window.addEventListener('load', () => {
       const alpha = s.baseAlpha * (0.6 + 0.4 * Math.sin(s.phase));
       spaceCtx.beginPath();
       spaceCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      spaceCtx.fillStyle = `rgba(255,140,100,${alpha})`;
+      spaceCtx.fillStyle = `rgba(255,255,255,${alpha})`;
       spaceCtx.fill();
     });
 
@@ -2318,7 +1124,7 @@ window.addEventListener('load', () => {
 
       spaceCtx.beginPath();
       spaceCtx.arc(m.x, m.y, 1.6, 0, Math.PI * 2);
-      spaceCtx.fillStyle = `rgba(255,140,100,${fade})`;
+      spaceCtx.fillStyle = `rgba(255,255,255,${fade})`;
       spaceCtx.fill();
     });
 
@@ -2332,13 +1138,13 @@ const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 let currentTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', currentTheme);
-themeToggle.textContent = currentTheme === 'dark' ? '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' : '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
 
 themeToggle.addEventListener('click', () => {
   currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', currentTheme);
   localStorage.setItem('theme', currentTheme);
-  themeToggle.textContent = currentTheme === 'dark' ? '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>' : '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
 });
 
 // Scroll Progress
@@ -2353,73 +1159,22 @@ window.addEventListener('scroll', () => {
 const cursor = document.getElementById('cursor');
 const cursorLight = document.getElementById('cursorLight');
 
-
-
-// ===== Fixed Custom Cursor (60fps RAF) =====
-(function() {
-  if (window.innerWidth <= 768 || currentTheme === 'light') return;
-
-  let targetX = 0, targetY = 0;
-  let cursorX = 0, cursorY = 0;
-  let lightX = 0, lightY = 0;
-  let lightCurrentX = 0, lightCurrentY = 0;
-  let isActive = true;
-  let rafId = null;
-
+if (window.innerWidth > 768 && currentTheme === 'dark') {
   document.addEventListener('mousemove', (e) => {
-    targetX = e.clientX;
-    targetY = e.clientY;
-    if (!isActive) {
-      isActive = true;
-      animateCursor();
-    }
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    cursorLight.style.left = e.clientX + 'px';
+    cursorLight.style.top = e.clientY + 'px';
   });
 
-  document.addEventListener('mouseleave', () => { isActive = false; });
-  document.addEventListener('mouseenter', () => { 
-    isActive = true; 
-    animateCursor(); 
-  });
-
-  function animateCursor() {
-    if (!isActive) return;
-
-    // Cursor follows instantly (0.25 lerp for smoothness)
-    cursorX += (targetX - cursorX) * 0.25;
-    cursorY += (targetY - cursorY) * 0.25;
-
-    // Light follows slower (0.08 lerp for trailing effect)
-    lightCurrentX += (targetX - lightCurrentX) * 0.08;
-    lightCurrentY += (targetY - lightCurrentY) * 0.08;
-
-    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate3d(-50%, -50%, 0)`;
-    cursorLight.style.transform = `translate3d(${lightCurrentX}px, ${lightCurrentY}px, 0) translate3d(-50%, -50%, 0)`;
-
-    rafId = requestAnimationFrame(animateCursor);
-  }
-
-  // Hover states
-  const hoverTargets = 'a, button, .project-card, .contact-card, .filter-btn, .project-img-wrap, .lightbox-close, .social-link, .submit-btn, .theme-toggle, .focus-toggle, .back-to-top, .hamburger, .share-btn';
-  document.querySelectorAll(hoverTargets).forEach(el => {
+  document.querySelectorAll('a, button, .project-card, .contact-card, .filter-btn, .project-img-wrap, .lightbox-close, .social-link, .submit-btn, .theme-toggle, .video-placeholder, .slider-button').forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 
-  // Click states
   document.addEventListener('mousedown', () => cursor.classList.add('click'));
   document.addEventListener('mouseup', () => cursor.classList.remove('click'));
-
-  // Start animation
-  animateCursor();
-
-  // Cleanup on theme change
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'theme' && e.newValue === 'light') {
-      isActive = false;
-      if (rafId) cancelAnimationFrame(rafId);
-    }
-  });
-})();
+}
 
 // Particle Network
 const canvas = document.getElementById('particleCanvas');
@@ -2456,15 +1211,14 @@ class Particle {
     }
   }
   draw() {
-    ctx.fillStyle = 'rgba(255,107,53,0.5)';
+    ctx.fillStyle = 'rgba(102,126,234,0.5)';
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
   }
 }
 
-const particleCount = window.innerWidth < 768 ? 25 : 60;
-for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+for (let i = 0; i < 60; i++) particles.push(new Particle());
 
 function animateParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2475,7 +1229,7 @@ function animateParticles() {
       const dy = particles[i].y - particles[j].y;
       const dist = Math.sqrt(dx*dx + dy*dy);
       if (dist < 120) {
-        ctx.strokeStyle = `rgba(255,107,53,${0.15 * (1 - dist/120)})`;
+        ctx.strokeStyle = `rgba(102,126,234,${0.15 * (1 - dist/120)})`;
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
@@ -2491,8 +1245,7 @@ document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.c
 
 // Floating Stars
 const starsContainer = document.getElementById('floatingStars');
-const starCount = window.innerWidth < 768 ? 12 : 30;
-for (let i = 0; i < starCount; i++) {
+for (let i = 0; i < 30; i++) {
   const star = document.createElement('div');
   star.className = 'star';
   star.style.left = Math.random() * 100 + '%';
@@ -2761,7 +1514,7 @@ function loadComments() {
   userCommentsContainer.innerHTML = '';
   if (comments.length > 0) {
     const title = document.createElement('h3');
-    title.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> تعليقات الزوار';
+    title.textContent = '💬 تعليقات الزوار';
     title.style.textAlign = 'center';
     title.style.marginBottom = '20px';
     title.style.fontSize = '1.3em';
@@ -2772,7 +1525,7 @@ function loadComments() {
     div.className = 'user-comment';
     div.innerHTML = `
       <div class="user-comment-header">
-        <span class="user-comment-name">${escapeHtml(comment.name)} ${'<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'.repeat(comment.rating)}</span>
+        <span class="user-comment-name">${escapeHtml(comment.name)} ${'★'.repeat(comment.rating)}</span>
         <span class="user-comment-date">${comment.date}</span>
       </div>
       <p class="user-comment-text">${escapeHtml(comment.text)}</p>
@@ -2816,7 +1569,7 @@ commentForm.addEventListener('submit', (e) => {
   // Show success animation
   const btn = commentForm.querySelector('.submit-btn');
   const originalText = btn.textContent;
-  btn.textContent = '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> تم الإرسال!';
+  btn.textContent = '✅ تم الإرسال!';
   btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
   setTimeout(() => {
     btn.textContent = originalText;
@@ -2868,288 +1621,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
-
-// ===== Back to Top =====
-const backToTop = document.getElementById('backToTop');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 500) backToTop.classList.add('visible');
-  else backToTop.classList.remove('visible');
-});
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ===== Mobile Menu =====
-function toggleMobileMenu() {
-  document.getElementById('hamburger').classList.toggle('active');
-  document.getElementById('mobileNav').classList.toggle('active');
-  document.getElementById('mobileOverlay').classList.toggle('active');
-  document.body.style.overflow = document.getElementById('mobileNav').classList.contains('active') ? 'hidden' : '';
-}
-
-// ===== Active Nav Link Highlighting =====
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
-
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const id = entry.target.getAttribute('id');
-      navLinks.forEach(link => {
-        link.classList.toggle('active', link.dataset.section === id);
-      });
-      mobileNavLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-      });
-    }
-  });
-}, { threshold: 0.3 });
-
-sections.forEach(section => sectionObserver.observe(section));
-
-// ===== Image Error Handler =====
-function handleImageError(img) {
-  img.onerror = null;
-  img.style.display = 'none';
-  const wrap = img.closest('.project-img-wrap');
-  if (wrap) {
-    wrap.classList.add('img-error');
-    wrap.innerHTML = '<span>الصورة غير متوفرة</span>';
-  }
-}
-
-// ===== Video Lazy Loading =====
-function loadVideo(placeholder) {
-  const wrapper = placeholder.closest('.video-lazy');
-  const src = wrapper.dataset.src;
-  wrapper.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>`;
-}
-
-// Intersection Observer for auto-loading videos when visible
-const videoObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const placeholder = entry.target.querySelector('.video-placeholder');
-      if (placeholder) loadVideo(placeholder);
-      videoObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.3 });
-
-document.querySelectorAll('.video-lazy').forEach(v => videoObserver.observe(v));
-
-// ===== Copy to Clipboard =====
-function showToast(message, icon = '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') {
-  const toast = document.getElementById('toast');
-  toast.innerHTML = `${icon} ${message}`;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-document.querySelectorAll('.contact-card').forEach(card => {
-  card.addEventListener('click', (e) => {
-    const text = card.querySelector('p').textContent.trim();
-    if (text.includes('@') || text.startsWith('+')) {
-      e.preventDefault();
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('تم النسخ إلى الحافظة');
-      }).catch(() => {
-        // Fallback
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showToast('تم النسخ إلى الحافظة');
-      });
-    }
-  });
-});
-
-// ===== Parallax Scroll =====
-const parallaxImg = document.getElementById('aboutParallaxImg');
-if (parallaxImg) {
-  window.addEventListener('scroll', () => {
-    const rect = parallaxImg.closest('.about-image-frame').getBoundingClientRect();
-    const speed = 0.15;
-    const yPos = -(rect.top * speed);
-    parallaxImg.style.transform = `translateY(${yPos}px) scale(1.1)`;
-  });
-}
-
-// ===== Particle Burst on Click =====
-const burstCanvas = document.getElementById('particleBurst');
-const burstCtx = burstCanvas.getContext('2d');
-let burstParticles = [];
-
-function resizeBurst() {
-  burstCanvas.width = window.innerWidth;
-  burstCanvas.height = window.innerHeight;
-}
-resizeBurst();
-window.addEventListener('resize', resizeBurst);
-
-class BurstParticle {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.vx = (Math.random() - 0.5) * 12;
-    this.vy = (Math.random() - 0.5) * 12;
-    this.life = 1;
-    this.decay = Math.random() * 0.02 + 0.015;
-    this.size = Math.random() * 4 + 2;
-    this.color = `hsl(${Math.random() * 40 + 15}, 90%, 60%)`;
-  }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.vy += 0.3; // gravity
-    this.life -= this.decay;
-    this.size *= 0.96;
-  }
-  draw() {
-    burstCtx.globalAlpha = this.life;
-    burstCtx.fillStyle = this.color;
-    burstCtx.beginPath();
-    burstCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    burstCtx.fill();
-    burstCtx.globalAlpha = 1;
-  }
-}
-
-function spawnBurst(x, y) {
-  for (let i = 0; i < 20; i++) {
-    burstParticles.push(new BurstParticle(x, y));
-  }
-}
-
-function animateBurst() {
-  burstCtx.clearRect(0, 0, burstCanvas.width, burstCanvas.height);
-  burstParticles = burstParticles.filter(p => p.life > 0);
-  burstParticles.forEach(p => { p.update(); p.draw(); });
-  requestAnimationFrame(animateBurst);
-}
-animateBurst();
-
-document.addEventListener('click', (e) => {
-  if (e.target.closest('button, .btn, .project-card, .contact-card, .filter-btn, .share-btn, .submit-btn, .theme-toggle, .focus-toggle, .back-to-top, .hamburger')) {
-    spawnBurst(e.clientX, e.clientY);
-  }
-});
-
-// ===== Smooth Counter Easing =====
-function easeOutExpo(t) {
-  return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-}
-
-const smoothCounterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const target = parseInt(entry.target.dataset.target);
-      const suffix = entry.target.dataset.suffix || '';
-      const numberEl = entry.target.querySelector('.stat-number');
-      const duration = 2000;
-      const startTime = performance.now();
-
-      function updateCounter(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = easeOutExpo(progress);
-        const current = Math.floor(eased * target);
-        numberEl.textContent = current + suffix;
-        if (progress < 1) requestAnimationFrame(updateCounter);
-        else numberEl.textContent = target + suffix;
-      }
-      requestAnimationFrame(updateCounter);
-      smoothCounterObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.5 });
-
-statItems.forEach(item => {
-  counterObserver.unobserve(item);
-  smoothCounterObserver.observe(item);
-});
-
-// ===== Focus Mode =====
-function toggleFocusMode() {
-  document.body.classList.toggle('focus-mode');
-  const isFocus = document.body.classList.contains('focus-mode');
-  document.getElementById('focusToggle').textContent = isFocus ? '<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' : '<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
-  showToast(isFocus ? 'وضع التركيز مفعل' : 'وضع التركيز معطل', isFocus ? '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>' : '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>');
-}
-
-// ===== Share Project =====
-function shareProject(e, title) {
-  e.stopPropagation();
-  const url = window.location.href;
-  if (navigator.share) {
-    navigator.share({ title: title, url: url });
-  } else {
-    navigator.clipboard.writeText(`${title} - ${url}`).then(() => {
-      showToast('تم نسخ رابط المشروع');
-    });
-  }
-}
-
-
-
-// ===== Masonry Layout Adjustment =====
-function adjustMasonry() {
-  const grid = document.getElementById('projectsGrid');
-  if (!grid || window.innerWidth <= 768) return;
-  const cards = grid.querySelectorAll('.project-card');
-  cards.forEach(card => {
-    const img = card.querySelector('.project-img');
-    if (img && img.naturalHeight) {
-      const ratio = img.naturalHeight / img.naturalWidth;
-      if (ratio > 1.2) card.style.gridRowEnd = 'span 2';
-    }
-  });
-}
-
-window.addEventListener('load', adjustMasonry);
-window.addEventListener('resize', adjustMasonry);
-
-// ===== Enhanced Lightbox with Keyboard Nav =====
-let currentLightboxIndex = 0;
-const lightboxImages = [];
-
-document.querySelectorAll('.project-card').forEach((card, idx) => {
-  const img = card.querySelector('.project-img');
-  const title = card.querySelector('.project-title').textContent;
-  if (img) lightboxImages.push({ src: img.src, title: title });
-
-  const wrap = card.querySelector('.project-img-wrap');
-  if (wrap) {
-    wrap.addEventListener('click', () => {
-      currentLightboxIndex = idx;
-    });
-  }
-});
-
-document.addEventListener('keydown', (e) => {
-  if (!lightbox.classList.contains('active')) return;
-  if (e.key === 'ArrowRight') {
-    currentLightboxIndex = (currentLightboxIndex + 1) % lightboxImages.length;
-    updateLightboxImage();
-  } else if (e.key === 'ArrowLeft') {
-    currentLightboxIndex = (currentLightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
-    updateLightboxImage();
-  }
-});
-
-function updateLightboxImage() {
-  const item = lightboxImages[currentLightboxIndex];
-  lightboxImg.src = item.src;
-  lightboxCaption.textContent = item.title;
-  if (magnifierGlass.style.display === 'block') {
-    magnifierGlass.style.backgroundImage = `url(${item.src})`;
-  }
-}
-
 </script>
 </body>
 </html>
